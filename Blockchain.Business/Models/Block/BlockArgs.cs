@@ -1,4 +1,4 @@
-﻿namespace Blockchain.Business.CryptoChain;
+﻿namespace Blockchain.Business.Models.Block;
 
 public readonly struct BlockArgs
 {

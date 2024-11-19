@@ -1,14 +1,13 @@
-﻿namespace Blockchain.Business.Extensions
+﻿namespace Blockchain.Business.Extensions;
+
+public static class StringExtenstions
 {
-    public static class StringExtenstions
+    public static string GetLastCharacters(this string str, int n)
     {
-        public static string GetLastCharacters(this string str, int n)
+        if (str.Length < n)
         {
-            if(str.Length < n)
-            {
-                return str;
-            }
-            return str[^n..];
+            return str;
         }
+        return str[^n..];
     }
 }

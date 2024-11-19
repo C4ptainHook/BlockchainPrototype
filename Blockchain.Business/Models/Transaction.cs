@@ -1,4 +1,4 @@
-﻿namespace Blockchain.Business.Transactions;
+﻿namespace Blockchain.Business.Models;
 
 public record Transaction
 {

@@ -1,8 +1,11 @@
-using Blockchain.Business.CryptoChain;
-using Blockchain.Business.Mining;
-using Blockchain.Business.ProofOfWork;
-using Blockchain.Business.ProofOfWork.Factories;
+using Blockchain.Business.Interfaces;
+using Blockchain.Business.Interfaces.Mining;
+using Blockchain.Business.Interfaces.PoW;
+using Blockchain.Business.Models;
+using Blockchain.Business.Models.Block;
 using Blockchain.Business.RandomWrappers;
+using Blockchain.Business.Services;
+using Blockchain.Business.Utils;
 using Serilog;
 
 namespace Blockchain.Api
@@ -26,7 +29,7 @@ namespace Blockchain.Api
                 IProofOfWorkFactory<ProofOfWorkArgs>,
                 BasicProofOfWorkFactory
             >();
-            builder.Services.AddTransient<IBlockChain, BlockChain>();
+            builder.Services.AddTransient<IBlockChain<Block>, BlockChain>();
             builder.Services.AddTransient<IMiner, Miner>();
 
             var app = builder.Build();

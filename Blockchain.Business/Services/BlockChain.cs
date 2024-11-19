@@ -1,17 +1,19 @@
 ﻿using System.Collections;
-using Blockchain.Business.Transactions;
+using Blockchain.Business.Interfaces.Mining;
+using Blockchain.Business.Models;
+using Blockchain.Business.Models.Block;
 
-namespace Blockchain.Business.CryptoChain;
+namespace Blockchain.Business.Services;
 
-public class BlockChain : IBlockChain
-{ 
+public class BlockChain : IBlockChain<Block>
+{
     private readonly List<Block> _chain = [];
     private readonly List<object> _currentTransactions = [];
-    
+
     public int LastIndex => _chain.Count - 1;
     public Block? LastBlock
     {
-        get => _chain?.LastOrDefault()!; 
+        get => _chain?.LastOrDefault()!;
     }
 
     public Block this[int index]

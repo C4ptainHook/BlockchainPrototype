@@ -1,4 +1,4 @@
-﻿using Blockchain.Business.Mining;
+﻿using Blockchain.Business.Interfaces.Mining;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blockchain.Api.Controllers

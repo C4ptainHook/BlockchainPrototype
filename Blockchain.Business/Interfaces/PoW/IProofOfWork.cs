@@ -1,6 +1,6 @@
-﻿using Blockchain.Business.CryptoChain;
+﻿using Blockchain.Business.Models.Block;
 
-namespace Blockchain.Business.ProofOfWork;
+namespace Blockchain.Business.Interfaces.PoW;
 
 public interface IProofOfWork
 {

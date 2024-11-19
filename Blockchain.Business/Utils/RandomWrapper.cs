@@ -1,4 +1,6 @@
-﻿namespace Blockchain.Business.RandomWrappers
+﻿using Blockchain.Business.Interfaces;
+
+namespace Blockchain.Business.RandomWrappers
 {
     public class RandomWrapper : IRandomNumerical<int>
     {

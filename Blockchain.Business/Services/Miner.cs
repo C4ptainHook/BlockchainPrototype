@@ -1,24 +1,30 @@
-﻿using System.Text;
+﻿using Blockchain.Business.Extensions;
+using Blockchain.Business.Interfaces.Mining;
+using Blockchain.Business.Interfaces.PoW;
+using Blockchain.Business.Models;
+using Blockchain.Business.Models.Block;
 using Blockchain.Business.Resources;
-using Blockchain.Business.CryptoChain;
-using Blockchain.Business.ProofOfWork;
-using Blockchain.Business.ProofOfWork.Factories;
 using Microsoft.Extensions.Logging;
-using Blockchain.Business.Extensions;
-namespace Blockchain.Business.Mining;
 
+namespace Blockchain.Business.Services;
 public class Miner : IMiner
 {
     private readonly IProofOfWork _proofOfWork;
     private readonly ILogger<IMiner> _logger;
-    public readonly IBlockChain _blockchain;
-    public Miner(IBlockChain blockchain, IProofOfWorkFactory<ProofOfWorkArgs> proofOfWorkFactory, ILogger<IMiner> logger)
+    public readonly IBlockChain<Block> _blockchain;
+
+    public Miner(
+        IBlockChain<Block> blockchain,
+        IProofOfWorkFactory<ProofOfWorkArgs> proofOfWorkFactory,
+        ILogger<IMiner> logger
+    )
     {
         _blockchain = blockchain;
         var proofOfWorkArgs = new ProofOfWorkArgs(TBConfig.DD, int.Parse(TBConfig.MMYYYY));
         _proofOfWork = proofOfWorkFactory.CreateProofOfWork(proofOfWorkArgs);
         _logger = logger;
     }
+
     public Block MineBlock()
     {
         var nonce = int.Parse(TBConfig.DD + TBConfig.MM);
@@ -35,12 +41,20 @@ public class Miner : IMiner
             if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
             {
                 _blockchain.AddBlock(newBlock);
-                _logger.LogInformation("Block {newBlockIndex} mined after {iteration} iterations", newBlockIndex, iteration);
+                _logger.LogInformation(
+                    "Block {newBlockIndex} mined after {iteration} iterations",
+                    newBlockIndex,
+                    iteration
+                );
                 _logger.LogInformation("Proof number: {proof}", nonce);
-                var currentHash = _proofOfWork.GetHash(_blockchain.LastBlock) ?? throw new InvalidOperationException("Block could not be mined");
-                _logger.LogInformation("Previous hash: ..{previousHash} <-> Current hash: ..{currentHash}",
+                var currentHash =
+                    _proofOfWork.GetHash(_blockchain.LastBlock)
+                    ?? throw new InvalidOperationException("Block could not be mined");
+                _logger.LogInformation(
+                    "Previous hash: ..{previousHash} <-> Current hash: ..{currentHash}",
                     lastBlockHash.GetLastCharacters(5),
-                    currentHash.GetLastCharacters(5));
+                    currentHash.GetLastCharacters(5)
+                );
                 minedSuccesfully = true;
             }
             nonce = _proofOfWork.GetNewNonce();
