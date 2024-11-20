@@ -4,5 +4,5 @@ namespace Blockchain.Business.Interfaces.Mining;
 
 public interface IMiner
 {
-    Block MineBlock();
+    Task<Block> MineBlockAsync();
 }

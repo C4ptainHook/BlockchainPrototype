@@ -1,4 +1,4 @@
-using Blockchain.Business.Interfaces;
+using Blockchain.Business.Interfaces.Utils;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.PoW;
 using Blockchain.Business.Models;
@@ -7,6 +7,7 @@ using Blockchain.Business.RandomWrappers;
 using Blockchain.Business.Services;
 using Blockchain.Business.Utils;
 using Serilog;
+using Blockchain.Business.Interfaces;
 
 namespace Blockchain.Api
 {
@@ -25,12 +26,13 @@ namespace Blockchain.Api
             );
 
             builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
-            builder.Services.AddTransient<
+            builder.Services.AddSingleton<ITransactionService, TransactionService>();
+            builder.Services.AddSingleton<
                 IProofOfWorkFactory<ProofOfWorkArgs>,
                 BasicProofOfWorkFactory
             >();
-            builder.Services.AddTransient<IBlockChain<Block>, BlockChain>();
-            builder.Services.AddTransient<IMiner, Miner>();
+            builder.Services.AddSingleton<IBlockChain<Block>, BlockChain>();
+            builder.Services.AddSingleton<IMiner, Miner>();
 
             var app = builder.Build();
 

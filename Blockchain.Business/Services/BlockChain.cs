@@ -8,7 +8,6 @@ namespace Blockchain.Business.Services;
 public class BlockChain : IBlockChain<Block>
 {
     private readonly List<Block> _chain = [];
-    private readonly List<object> _currentTransactions = [];
 
     public int LastIndex => _chain.Count - 1;
     public Block? LastBlock
@@ -26,15 +25,8 @@ public class BlockChain : IBlockChain<Block>
         _chain.Add(newBlock);
     }
 
-    public int RegisterValue(object value)
-    {
-        var transaction = value as Transaction;
-        if (transaction is null)
-        {
-            throw new ArgumentException($"The {nameof(BlockChain)} supports only transactions.");
-        }
-        _currentTransactions.Add(value);
-        return _chain.Count;
+    public IReadOnlyCollection<Block> CheckChain(){
+        return _chain.AsReadOnly<Block>();
     }
 
     public IEnumerator<Block> GetEnumerator()

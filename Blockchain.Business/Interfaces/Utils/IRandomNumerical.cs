@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Blockchain.Business.Interfaces;
+namespace Blockchain.Business.Interfaces.Utils;
 
 public interface IRandomNumerical<T>
     where T : INumber<T>

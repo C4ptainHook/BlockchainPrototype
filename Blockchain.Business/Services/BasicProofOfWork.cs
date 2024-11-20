@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Blockchain.Business.Interfaces;
+using Blockchain.Business.Interfaces.Utils;
 using Blockchain.Business.Interfaces.PoW;
 using Blockchain.Business.Models;
 using Blockchain.Business.Models.Block;
@@ -27,7 +27,7 @@ public class BasicProofOfWork(
         blockAsString
             .Append(blockToProve.Index)
             .Append(blockToProve.TimeStamp)
-            .Append(blockToProve.Content)
+            .Append(blockToProve.Transactions)
             .Append(blockToProve.Proof)
             .Append(blockToProve.PreviousHash);
 

@@ -4,8 +4,8 @@ public record Transaction
 {
     public string Sender { get; init; }
     public string Recipient { get; init; }
-    public int Amount { get; init; }
-    public Transaction(string sender, string recipient, int amount)
+    public decimal Amount { get; init; }
+    public Transaction(string sender, string recipient, decimal amount)
     {
         Sender = sender;
         Recipient = recipient;

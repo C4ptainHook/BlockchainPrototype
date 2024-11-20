@@ -1,4 +1,4 @@
-﻿using Blockchain.Business.Interfaces;
+﻿using Blockchain.Business.Interfaces.Utils;
 
 namespace Blockchain.Business.RandomWrappers
 {

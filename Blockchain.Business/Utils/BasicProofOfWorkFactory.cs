@@ -1,4 +1,4 @@
-﻿using Blockchain.Business.Interfaces;
+﻿using Blockchain.Business.Interfaces.Utils;
 using Blockchain.Business.Interfaces.PoW;
 using Blockchain.Business.Models;
 using Blockchain.Business.Services;
