@@ -1,4 +1,4 @@
-﻿namespace Blockchain.Business.Extensions;
+namespace Blockchain.Business.Extensions;
 
 public static class StringExtenstions
 {

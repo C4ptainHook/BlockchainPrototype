@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Api", "Blockchain.Api\Blockchain.Api.csproj", "{212C2FAE-A098-4433-8011-BD469B55EC74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Api", "src\Blockchain.Api\Blockchain.Api.csproj", "{212C2FAE-A098-4433-8011-BD469B55EC74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Business", "Blockchain.Business\Blockchain.Business.csproj", "{CE990E6B-4737-4156-83FA-7054806810C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Business", "src\Blockchain.Business\Blockchain.Business.csproj", "{CE990E6B-4737-4156-83FA-7054806810C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
