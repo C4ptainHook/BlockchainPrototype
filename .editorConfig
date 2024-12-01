@@ -153,9 +153,6 @@ csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 
-# unused imports
-dotnet_diagnostic.IDE0005.severity = error
-
 # Meziantou.Analyzer
 dotnet_diagnostic.MA0002.severity = suggestion # IEqualityComparer<string> or IComparer<string> is missing
 dotnet_diagnostic.MA0016.severity = suggestion # Prefer using collection abstraction instead of implementation
