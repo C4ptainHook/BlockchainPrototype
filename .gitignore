@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Editor files
+.[Vv]scode/
+
 # User-specific files
 *.rsuser
 *.suo
