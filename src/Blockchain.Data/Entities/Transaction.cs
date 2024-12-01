@@ -1,8 +1,7 @@
 namespace Blockchain.Data.Entities;
 
-public class Transaction
+public class Transaction : BaseEntity
 {
-    public int Id { get; set; }
     public decimal Amount { get; set; }
     public Wallet Recepient { get; set; }
     public Wallet Sender { get; set; }
