@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Api", "src\Block
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Business", "src\Blockchain.Business\Blockchain.Business.csproj", "{CE990E6B-4737-4156-83FA-7054806810C2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7FE18B23-9AFD-4615-8AE2-E2F2B7F490A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Data", "src\Blockchain.Data\Blockchain.Data.csproj", "{7D6DF99A-C1D0-415D-B74D-0AD3398D2675}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,12 @@ Global
 		{CE990E6B-4737-4156-83FA-7054806810C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE990E6B-4737-4156-83FA-7054806810C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE990E6B-4737-4156-83FA-7054806810C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D6DF99A-C1D0-415D-B74D-0AD3398D2675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D6DF99A-C1D0-415D-B74D-0AD3398D2675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D6DF99A-C1D0-415D-B74D-0AD3398D2675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D6DF99A-C1D0-415D-B74D-0AD3398D2675}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D6DF99A-C1D0-415D-B74D-0AD3398D2675} = {7FE18B23-9AFD-4615-8AE2-E2F2B7F490A6}
 	EndGlobalSection
 EndGlobal
