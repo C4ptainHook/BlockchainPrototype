@@ -1,9 +1,8 @@
 namespace Blockchain.Data.Interfaces;
 
-public interface IRepository<T>
+public interface IReadable<T>
     where T : class
 {
     Task<T> GetByIdAsync(int id);
     Task<IEnumerable<T>> GetAllAsync();
-    Task AddAsync(T entity);
 }

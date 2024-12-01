@@ -1,4 +1,5 @@
 using System.Reflection;
+using Blockchain.Data.Attributes;
 using Blockchain.Data.Interfaces;
 using Blockchain.Data.Repositories;
 
@@ -16,21 +17,22 @@ public class UnitOfWork : IUnitOfWork
         GetRepositories();
     }
 
-    private void GetRepositories()
+    protected void GetRepositories()
     {
         var types =
             Assembly
                 .GetAssembly(typeof(UnitOfWork))
                 ?.GetTypes()
-                .Where(x =>
-                    x.BaseType != null
-                    && x.BaseType.IsGenericType
-                    && x.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)
-                ) ?? throw new NullReferenceException("No repositories found");
+                .Where(x => x.GetCustomAttributes<RepositoryAttribute>().Any())
+            ?? throw new NullReferenceException("No repositories found");
 
         foreach (var type in types)
         {
-            Repositories.Add(type.Name.Replace("Repository", string.Empty), type);
+            Repositories.Add(
+                type.GetCustomAttribute<RepositoryAttribute>()?.Name
+                    ?? throw new ArgumentNullException($"{type.Name} attribute naming violation"),
+                type
+            );
         }
     }
 
