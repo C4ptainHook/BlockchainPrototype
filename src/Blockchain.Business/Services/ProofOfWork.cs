@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Blockchain.Business.Services;
 
-public class BasicProofOfWork(
+public class ProofOfWork(
     IRandomNumerical<int> random,
     ProofOfWorkArgs args,
     ILogger<IProofOfWork> logger

@@ -27,7 +27,7 @@ public class Program
         builder.Services.AddSingleton<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<
             IProofOfWorkFactory<ProofOfWorkArgs>,
-            BasicProofOfWorkFactory
+            ProofOfWorkFactory
         >();
         builder.Services.AddSingleton<IBlockChain<Block>, BlockChain>();
         builder.Services.AddSingleton<IMiner, Miner>();

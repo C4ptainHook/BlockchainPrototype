@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Blockchain.Business.Utils;
 
-public class BasicProofOfWorkFactory : IProofOfWorkFactory<ProofOfWorkArgs>
+public class ProofOfWorkFactory : IProofOfWorkFactory<ProofOfWorkArgs>
 {
     private readonly IRandomNumerical<int> _random;
     private readonly ILogger<IProofOfWork> _logger;
 
-    public BasicProofOfWorkFactory(IRandomNumerical<int> random, ILogger<IProofOfWork> logger)
+    public ProofOfWorkFactory(IRandomNumerical<int> random, ILogger<IProofOfWork> logger)
     {
         _random = random;
         _logger = logger;
@@ -19,6 +19,6 @@ public class BasicProofOfWorkFactory : IProofOfWorkFactory<ProofOfWorkArgs>
 
     public IProofOfWork CreateProofOfWork(ProofOfWorkArgs args)
     {
-        return new BasicProofOfWork(_random, args, _logger);
+        return new ProofOfWork(_random, args, _logger);
     }
 }
