@@ -1,6 +1,6 @@
 namespace Blockchain.Business.Interfaces.Mining;
 
-public interface IBlockChain<TBlockType> : IEnumerable<TBlockType>
+public interface IBlockchainService<TBlockType> : IEnumerable<TBlockType>
     where TBlockType : class
 {
     TBlockType? LastBlock { get; }

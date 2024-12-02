@@ -10,7 +10,9 @@ namespace Blockchain.Api.Controllers;
 public class BlockchainController : Controller
 {
     [HttpGet("chain")]
-    public ActionResult<IReadOnlyCollection<Block>> GetFullChain(IBlockChain<Block> blockchain)
+    public ActionResult<IReadOnlyCollection<Block>> GetFullChain(
+        IBlockchainService<Block> blockchain
+    )
     {
         return Ok(blockchain.CheckChain());
     }
@@ -26,7 +28,7 @@ public class BlockchainController : Controller
     }
 
     [HttpPost("mine")]
-    public async Task<ActionResult> MineBlock(IMiner miner)
+    public async Task<ActionResult> MineBlock(IMinerService miner)
     {
         await miner.MineBlockAsync();
         return Ok();
