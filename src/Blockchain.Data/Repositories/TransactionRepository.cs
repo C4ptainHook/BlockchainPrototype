@@ -6,10 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Blockchain.Data.Repositories;
 
 [Repository(nameof(TransactionRepository))]
-public class TransactionRepository
-    : IReadable<Transaction>,
-        IAddable<Transaction>,
-        IRemovable<Transaction>
+public class TransactionRepository : ITransactionRepository<Transaction>
 {
     private readonly DbSet<Transaction> _transactions;
 
