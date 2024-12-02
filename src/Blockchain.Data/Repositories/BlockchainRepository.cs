@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Blockchain.Data.Repositories;
 
 [Repository(nameof(BlockchainRepository))]
-public class BlockchainRepository : IReadable<Block>, IAddable<Block>
+public class BlockchainRepository : IBlockchainRepository<Block>
 {
     private readonly DbSet<Block> _blocks;
 
