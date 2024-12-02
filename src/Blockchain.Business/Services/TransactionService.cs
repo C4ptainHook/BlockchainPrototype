@@ -1,54 +1,42 @@
 using Blockchain.Business.Interfaces;
+using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
+using Blockchain.Data.Entities;
+using Blockchain.Data.Interfaces;
 
 namespace Blockchain.Business.Services;
 
-public class TransactionService : ITransactionService
+public class TransactionService(
+    IUnitOfWork unitOfWork,
+    IMapper<TransactionModel, Transaction> mapper
+) : ITransactionService
 {
-    private Queue<Transaction> _transactions = new();
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMapper<TransactionModel, Transaction> _mapper = mapper;
     private static object _lock = new();
 
-    public async Task AddAsync(Transaction transaction)
+    public async Task AddAsync(TransactionModel transaction)
     {
-        await Task.Run(() =>
-        {
-            lock (_lock)
-            {
-                _transactions.Enqueue(transaction);
-            }
-        });
+        var transactionEntity = _mapper.Map(transaction);
+        await _unitOfWork
+            .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
+            .AddAsync(transactionEntity);
+        await _unitOfWork.CommitAsync();
     }
 
-    public IEnumerable<Transaction> Get(int? numberOfTransactions = null)
+    public async Task<IEnumerable<TransactionModel>> Get(int? numberOfTransactions = null)
     {
-        lock (_lock)
-        {
-            if (_transactions.Count == 0)
-                throw new InvalidOperationException("Transaction pool is empty");
-
-            numberOfTransactions ??= _transactions.Count;
-
-            if (_transactions.Count < numberOfTransactions)
-                throw new ArgumentOutOfRangeException(
-                    nameof(numberOfTransactions),
-                    "The number of transactions requested exceeds the available transactions."
-                );
-
-            for (int i = 0; i < numberOfTransactions; i++)
-            {
-                yield return _transactions.Dequeue();
-            }
-        }
+        var transactionEntities = await _unitOfWork
+            .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
+            .GetAllAsync();
+        return _mapper.Map(transactionEntities);
     }
 
     public async Task ClearAsync()
     {
-        await Task.Run(() =>
-        {
-            lock (_lock)
-            {
-                _transactions.Clear();
-            }
-        });
+        var transactions = await this.Get();
+        _unitOfWork
+            .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
+            .RemoveRange(_mapper.Map(transactions));
     }
 }

@@ -9,7 +9,6 @@ public class BlockConfiguration : IEntityTypeConfiguration<Block>
     public void Configure(EntityTypeBuilder<Block> builder)
     {
         builder.HasKey(b => b.Id);
-        builder.Property(b => b.Id).ValueGeneratedNever();
         builder.Property(b => b.TimeStamp).IsRequired();
         builder.Property(b => b.Proof).IsRequired();
         builder.Property(b => b.PreviousHash).IsRequired(false);

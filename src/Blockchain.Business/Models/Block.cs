@@ -5,10 +5,14 @@ public record Block
     public int Index { get; init; }
     public DateTime TimeStamp { get; init; }
     public int Proof { get; init; }
-    public ICollection<Transaction>? Transactions { get; init; }
+    public ICollection<TransactionModel>? Transactions { get; init; }
     public string? PreviousHash { get; init; }
 
-    public Block(object content, BlockArgs args, ICollection<Transaction>? transactions = default)
+    public Block(
+        object content,
+        BlockArgs args,
+        ICollection<TransactionModel>? transactions = default
+    )
     {
         Index = args.Index;
         TimeStamp = args.TimeStamp;
