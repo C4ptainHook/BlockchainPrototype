@@ -8,23 +8,23 @@ using Microsoft.Extensions.Logging;
 
 namespace Blockchain.Business.Services;
 
-public class Miner : IMiner
+public class MinerService : IMinerService
 {
-    private readonly IProofOfWork _proofOfWork;
+    private readonly IProofOfWorkService _proofOfWork;
     private readonly ITransactionService _transactionService;
-    private readonly ILogger<IMiner> _logger;
-    public IBlockChain<Block> _blockchain { get; }
+    private readonly ILogger<IMinerService> _logger;
+    public IBlockchainService<Block> _blockchain { get; }
     private readonly Func<int, decimal> _getReward;
 
-    public Miner(
-        IBlockChain<Block> blockchain,
-        IProofOfWorkFactory<ProofOfWorkArgs> proofOfWorkFactory,
+    public MinerService(
+        IBlockchainService<Block> blockchain,
+        IProofOfWorkServiceFactory<ProofOfWorkServiceArgs> proofOfWorkFactory,
         ITransactionService transactionService,
-        ILogger<IMiner> logger
+        ILogger<IMinerService> logger
     )
     {
         _blockchain = blockchain;
-        var proofOfWorkArgs = new ProofOfWorkArgs(TBConfig.DD, int.Parse(TBConfig.MMYYYY));
+        var proofOfWorkArgs = new ProofOfWorkServiceArgs(TBConfig.DD, int.Parse(TBConfig.MMYYYY));
         _proofOfWork = proofOfWorkFactory.CreateProofOfWork(proofOfWorkArgs);
         _transactionService = transactionService;
         _logger = logger;

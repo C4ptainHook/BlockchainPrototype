@@ -4,7 +4,7 @@ using Blockchain.Business.Models;
 
 namespace Blockchain.Business.Services;
 
-public class BlockChain : IBlockChain<Block>
+public class BlockchainService : IBlockchainService<Block>
 {
     private readonly List<Block> _chain = [];
 

@@ -26,11 +26,11 @@ public class Program
         builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
         builder.Services.AddSingleton<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<
-            IProofOfWorkFactory<ProofOfWorkArgs>,
-            BasicProofOfWorkFactory
+            IProofOfWorkServiceFactory<ProofOfWorkServiceArgs>,
+            ProofOfWorkServiceFactory
         >();
-        builder.Services.AddSingleton<IBlockChain<Block>, BlockChain>();
-        builder.Services.AddSingleton<IMiner, Miner>();
+        builder.Services.AddSingleton<IBlockchainService<Block>, BlockchainService>();
+        builder.Services.AddSingleton<IMinerService, MinerService>();
 
         var app = builder.Build();
 
