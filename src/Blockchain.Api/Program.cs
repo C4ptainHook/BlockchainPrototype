@@ -6,6 +6,9 @@ using Blockchain.Business.Models;
 using Blockchain.Business.RandomWrappers;
 using Blockchain.Business.Services;
 using Blockchain.Business.Utils;
+using Blockchain.Data;
+using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Serilog;
 
 namespace Blockchain.Api;
@@ -19,6 +22,12 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        var mongoClient = new MongoClient(builder.Configuration.GetConnectionString("MongoDb"));
+        builder.Services.AddDbContext<BlockchainContext>(options =>
+            options.UseMongoDB(mongoClient, "blockchain-mongo")
+        );
+
         builder.Host.UseSerilog(
             (context, configuration) => configuration.ReadFrom.Configuration(context.Configuration)
         );
