@@ -20,7 +20,7 @@ public class BlockchainController : Controller
     [HttpPost("transactions/new")]
     public async Task<IActionResult> AddTransaction(
         ITransactionService transactionService,
-        Transaction transaction
+        TransactionModel transaction
     )
     {
         await transactionService.AddAsync(transaction);

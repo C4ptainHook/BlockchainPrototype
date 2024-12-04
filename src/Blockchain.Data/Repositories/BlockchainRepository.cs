@@ -8,31 +8,31 @@ namespace Blockchain.Data.Repositories;
 [Repository(nameof(BlockchainRepository))]
 public class BlockchainRepository : IBlockchainRepository<Block>
 {
-    private readonly DbSet<Block> _blocks;
+    private readonly BlockchainContext _context;
 
-    public BlockchainRepository(DbSet<Block> blocks)
+    public BlockchainRepository(BlockchainContext context)
     {
-        _blocks = blocks;
+        _context = context;
     }
 
     public async Task AddAsync(Block entity)
     {
-        await _blocks.AddAsync(entity);
+        await _context.Blocks.AddAsync(entity);
     }
 
     public async Task AddRangeAsync(IEnumerable<Block> entities)
     {
-        await _blocks.AddRangeAsync(entities);
+        await _context.Blocks.AddRangeAsync(entities);
     }
 
     public async Task<IEnumerable<Block>> GetAllAsync()
     {
-        return await _blocks.AsNoTracking().ToListAsync();
+        return await _context.Blocks.AsNoTracking().ToListAsync();
     }
 
     public async Task<Block> GetByIdAsync(int id)
     {
-        return await _blocks.FindAsync(id)
+        return await _context.Blocks.FindAsync(id)
             ?? throw new KeyNotFoundException(
                 $"{typeof(Block).Name} entity with id:{id} not found"
             );
