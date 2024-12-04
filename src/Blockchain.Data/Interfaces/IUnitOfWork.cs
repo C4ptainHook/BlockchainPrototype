@@ -2,6 +2,7 @@ namespace Blockchain.Data.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {
-    Dictionary<string, Type> Repositories { get; }
+    T GetRepository<T>(string repositoryName)
+        where T : class;
     Task CommitAsync();
 }

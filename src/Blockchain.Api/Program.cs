@@ -6,6 +6,9 @@ using Blockchain.Business.Models;
 using Blockchain.Business.RandomWrappers;
 using Blockchain.Business.Services;
 using Blockchain.Business.Utils;
+using Blockchain.Data;
+using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Serilog;
 
 namespace Blockchain.Api;
@@ -19,6 +22,12 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        var mongoClient = new MongoClient(builder.Configuration.GetConnectionString("MongoDb"));
+        builder.Services.AddDbContext<BlockchainContext>(options =>
+            options.UseMongoDB(mongoClient, "blockchain-mongo")
+        );
+
         builder.Host.UseSerilog(
             (context, configuration) => configuration.ReadFrom.Configuration(context.Configuration)
         );
@@ -26,11 +35,11 @@ public class Program
         builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
         builder.Services.AddSingleton<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<
-            IProofOfWorkFactory<ProofOfWorkArgs>,
-            BasicProofOfWorkFactory
+            IProofOfWorkServiceFactory<ProofOfWorkServiceArgs>,
+            ProofOfWorkServiceFactory
         >();
-        builder.Services.AddSingleton<IBlockChain<Block>, BlockChain>();
-        builder.Services.AddSingleton<IMiner, Miner>();
+        builder.Services.AddSingleton<IBlockchainService<Block>, BlockchainService>();
+        builder.Services.AddSingleton<IMinerService, MinerService>();
 
         var app = builder.Build();
 

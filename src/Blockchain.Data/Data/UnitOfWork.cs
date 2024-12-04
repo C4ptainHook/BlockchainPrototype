@@ -1,5 +1,6 @@
 using System.Reflection;
 using Blockchain.Data.Attributes;
+using Blockchain.Data.Entities;
 using Blockchain.Data.Interfaces;
 using Blockchain.Data.Repositories;
 
@@ -7,17 +8,17 @@ namespace Blockchain.Data.Data;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private BlockchainContext _context;
-    public Dictionary<string, Type> Repositories { get; }
+    private readonly BlockchainContext _context;
+    private readonly Dictionary<string, object> _repositories;
 
     public UnitOfWork(BlockchainContext context)
     {
         _context = context;
-        Repositories = new Dictionary<string, Type>();
-        GetRepositories();
+        _repositories = new Dictionary<string, object>();
+        InitializeRepositories();
     }
 
-    protected void GetRepositories()
+    protected void InitializeRepositories()
     {
         var types =
             Assembly
@@ -28,12 +29,22 @@ public class UnitOfWork : IUnitOfWork
 
         foreach (var type in types)
         {
-            Repositories.Add(
-                type.GetCustomAttribute<RepositoryAttribute>()?.Name
-                    ?? throw new ArgumentNullException($"{type.Name} attribute naming violation"),
-                type
-            );
+            var attribute = type.GetCustomAttribute<RepositoryAttribute>();
+            var name =
+                attribute?.Name
+                ?? throw new ArgumentNullException($"{type.Name} attribute naming violation");
+            var instance = Activator.CreateInstance(type, _context);
         }
+    }
+
+    public T GetRepository<T>(string repositoryName)
+        where T : class
+    {
+        if (_repositories.TryGetValue(repositoryName, out var repository))
+        {
+            return (T)repository;
+        }
+        throw new KeyNotFoundException($"{repositoryName} repository not found");
     }
 
     public async Task CommitAsync()

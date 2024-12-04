@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Blockchain.Business.Services;
 
-public class BasicProofOfWork(
+public class ProofOfWorkService(
     IRandomNumerical<int> random,
-    ProofOfWorkArgs args,
-    ILogger<IProofOfWork> logger
-) : IProofOfWork
+    ProofOfWorkServiceArgs args,
+    ILogger<IProofOfWorkService> logger
+) : IProofOfWorkService
 {
     private readonly IRandomNumerical<int> _random = random;
-    private readonly ILogger<IProofOfWork> _logger = logger;
+    private readonly ILogger<IProofOfWorkService> _logger = logger;
 
     public string? GetHash(in Block? blockToProve)
     {

@@ -6,36 +6,33 @@ using Microsoft.EntityFrameworkCore;
 namespace Blockchain.Data.Repositories;
 
 [Repository(nameof(TransactionRepository))]
-public class TransactionRepository
-    : IReadable<Transaction>,
-        IAddable<Transaction>,
-        IRemovable<Transaction>
+public class TransactionRepository : ITransactionRepository<Transaction>
 {
-    private readonly DbSet<Transaction> _transactions;
+    private readonly BlockchainContext _context;
 
-    public TransactionRepository(DbSet<Transaction> transactions)
+    public TransactionRepository(BlockchainContext context)
     {
-        _transactions = transactions;
+        _context = context;
     }
 
     public async Task AddAsync(Transaction entity)
     {
-        await _transactions.AddAsync(entity);
+        await _context.Transactions.AddAsync(entity);
     }
 
     public async Task AddRangeAsync(IEnumerable<Transaction> entities)
     {
-        await _transactions.AddRangeAsync(entities);
+        await _context.Transactions.AddRangeAsync(entities);
     }
 
     public async Task<IEnumerable<Transaction>> GetAllAsync()
     {
-        return await _transactions.AsNoTracking().ToListAsync();
+        return await _context.Transactions.AsNoTracking().ToListAsync();
     }
 
     public async Task<Transaction> GetByIdAsync(int id)
     {
-        return await _transactions.FindAsync(id)
+        return await _context.Transactions.FindAsync(id)
             ?? throw new KeyNotFoundException(
                 $"{typeof(Transaction).Name} entity with id:{id} not found"
             );
@@ -43,11 +40,11 @@ public class TransactionRepository
 
     public void Remove(Transaction entity)
     {
-        _transactions.Remove(entity);
+        _context.Transactions.Remove(entity);
     }
 
     public void RemoveRange(IEnumerable<Transaction> entities)
     {
-        _transactions.RemoveRange(entities);
+        _context.Transactions.RemoveRange(entities);
     }
 }
