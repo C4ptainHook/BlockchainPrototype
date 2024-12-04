@@ -46,11 +46,7 @@ public class MinerService : IMinerService
             while (!minedSuccesfully)
             {
                 var blockArgs = new BlockArgs(newBlockIndex, DateTime.Now, nonce, lastBlockHash);
-                newBlock = new Block(
-                    new object(),
-                    blockArgs,
-                    [new Transaction("0", "node", reward)]
-                );
+                newBlock = new Block(new object(), blockArgs, [new TransactionModel(0, 0, reward)]);
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
                     _blockchain.AddBlock(newBlock);
