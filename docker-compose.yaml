@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  database:
+    image: mongo:latest
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+  web:
+    build: ./src
+    container_name: backend-container
+    volumes:
+      - ./src:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+
+volumes:
+  data:
