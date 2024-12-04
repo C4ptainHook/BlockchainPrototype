@@ -6,10 +6,13 @@ public record TransactionModel
     public int Recipient { get; init; }
     public decimal Amount { get; init; }
 
+    public DateTime TimeStamp { get; init; }
+
     public TransactionModel(int sender, int recipient, decimal amount)
     {
         Sender = sender;
         Recipient = recipient;
         Amount = amount;
+        TimeStamp = DateTime.Now;
     }
 }
