@@ -9,6 +9,7 @@ namespace Blockchain.Api.Controllers;
 public class BlockchainController : Controller
 {
     private readonly ILogger<BlockchainController> _logger;
+
     public BlockchainController(ILogger<BlockchainController> logger)
     {
         _logger = logger;
