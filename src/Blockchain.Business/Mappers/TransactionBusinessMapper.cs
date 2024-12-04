@@ -6,7 +6,7 @@ using Riok.Mapperly.Abstractions;
 namespace Blockchain.Business.Mappers;
 
 [Mapper]
-public partial class TransactionMapper : IMapper<TransactionModel, Transaction>
+public partial class TransactionBusinessMapper : IMapper<TransactionModel, Transaction>
 {
     [MapperIgnoreSource(nameof(Transaction.Id))]
     [MapperIgnoreSource(nameof(Transaction.Block))]

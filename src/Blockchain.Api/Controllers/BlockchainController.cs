@@ -16,8 +16,8 @@ public class BlockchainController : Controller
     }
 
     [HttpGet("chain")]
-    public ActionResult<IReadOnlyCollection<Block>> GetFullChain(
-        IBlockchainService<Block> blockchain
+    public ActionResult<IReadOnlyCollection<BlockModel>> GetFullChain(
+        IBlockchainService<BlockModel> blockchain
     )
     {
         return Ok(blockchain.CheckChain());

@@ -6,7 +6,7 @@ using Riok.Mapperly.Abstractions;
 namespace Blockchain.Api.Mappers;
 
 [Mapper]
-public partial class TransactionMapper : IMapper<TransactionDto, TransactionModel>
+public partial class TransactionApiMapper : IMapper<TransactionDto, TransactionModel>
 {
     [MapperIgnoreTarget(nameof(TransactionModel.TimeStamp))]
     public partial TransactionModel Map(TransactionDto from);

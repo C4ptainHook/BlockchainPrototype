@@ -4,32 +4,32 @@ using Blockchain.Business.Models;
 
 namespace Blockchain.Business.Services;
 
-public class BlockchainService : IBlockchainService<Block>
+public class BlockchainService : IBlockchainService<BlockModel>
 {
-    private readonly List<Block> _chain = [];
+    private readonly List<BlockModel> _chain = [];
 
     public int LastIndex => _chain.Count - 1;
-    public Block? LastBlock
+    public BlockModel? LastBlock
     {
         get => _chain?.LastOrDefault()!;
     }
 
-    public Block this[int index]
+    public BlockModel this[int index]
     {
         get { return _chain[index]; }
     }
 
-    public void AddBlock(Block newBlock)
+    public void AddBlock(BlockModel newBlock)
     {
         _chain.Add(newBlock);
     }
 
-    public IReadOnlyCollection<Block> CheckChain()
+    public IReadOnlyCollection<BlockModel> CheckChain()
     {
-        return _chain.AsReadOnly<Block>();
+        return _chain.AsReadOnly<BlockModel>();
     }
 
-    public IEnumerator<Block> GetEnumerator()
+    public IEnumerator<BlockModel> GetEnumerator()
     {
         return _chain.GetEnumerator();
     }

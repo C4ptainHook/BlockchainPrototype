@@ -16,7 +16,7 @@ public class ProofOfWorkService(
     private readonly IRandomNumerical<int> _random = random;
     private readonly ILogger<IProofOfWorkService> _logger = logger;
 
-    public string? GetHash(in Block? blockToProve)
+    public string? GetHash(in BlockModel? blockToProve)
     {
         if (blockToProve is null)
             return null;

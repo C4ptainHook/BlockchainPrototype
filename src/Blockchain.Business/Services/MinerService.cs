@@ -13,11 +13,11 @@ public class MinerService : IMinerService
     private readonly IProofOfWorkService _proofOfWork;
     private readonly ITransactionService _transactionService;
     private readonly ILogger<IMinerService> _logger;
-    public IBlockchainService<Block> _blockchain { get; }
+    public IBlockchainService<BlockModel> _blockchain { get; }
     private readonly Func<int, decimal> _getReward;
 
     public MinerService(
-        IBlockchainService<Block> blockchain,
+        IBlockchainService<BlockModel> blockchain,
         IProofOfWorkServiceFactory<ProofOfWorkServiceArgs> proofOfWorkFactory,
         ITransactionService transactionService,
         ILogger<IMinerService> logger
@@ -31,7 +31,7 @@ public class MinerService : IMinerService
         _getReward = CalculateReward(int.Parse(TBConfig.YYYY));
     }
 
-    public async Task<Block> MineBlockAsync()
+    public async Task<BlockModel> MineBlockAsync()
     {
         return await Task.Run(() =>
         {
@@ -41,12 +41,16 @@ public class MinerService : IMinerService
             var lastBlockHash = _proofOfWork.GetHash(_blockchain.LastBlock) ?? string.Empty;
             var iteration = 0;
             var reward = _getReward(_blockchain.Count());
-            Block newBlock = default!;
+            BlockModel newBlock = default!;
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
             while (!minedSuccesfully)
             {
                 var blockArgs = new BlockArgs(newBlockIndex, DateTime.Now, nonce, lastBlockHash);
-                newBlock = new Block(new object(), blockArgs, [new TransactionModel(0, 0, reward)]);
+                newBlock = new BlockModel(
+                    new object(),
+                    blockArgs,
+                    [new TransactionModel(0, 0, reward)]
+                );
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
                     _blockchain.AddBlock(newBlock);

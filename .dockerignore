@@ -1,1 +1,7 @@
-.git 
+bin/
+obj/
+*.md
+*.git
+.vs/
+Dockerfile
+docker-compose.yml

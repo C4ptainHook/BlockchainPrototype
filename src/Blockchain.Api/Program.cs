@@ -1,12 +1,19 @@
+using Blockchain.Api.DTOs;
+using Blockchain.Api.Mappers;
 using Blockchain.Business.Interfaces;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.PoW;
 using Blockchain.Business.Interfaces.Utils;
+using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
 using Blockchain.Business.RandomWrappers;
 using Blockchain.Business.Services;
 using Blockchain.Business.Utils;
 using Blockchain.Data;
+using Blockchain.Data.Data;
+using Blockchain.Data.Entities;
+using Blockchain.Data.Interfaces;
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using Serilog;
@@ -22,10 +29,19 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        Env.Load(@"..\Env\api.env");
 
-        var mongoClient = new MongoClient(builder.Configuration.GetConnectionString("MongoDb"));
-        builder.Services.AddDbContext<BlockchainContext>(options =>
-            options.UseMongoDB(mongoClient, "blockchain-mongo")
+        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING")))
+        {
+            throw new InvalidOperationException("MongoDB connection string is not configured.");
+        }
+        var mongoClient = new MongoClient(
+            Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING")
+        );
+
+        builder.Services.AddDbContext<BlockchainContext>(
+            options => options.UseMongoDB(mongoClient, "blockchain-mongo"),
+            ServiceLifetime.Singleton
         );
 
         builder.Host.UseSerilog(
@@ -33,12 +49,21 @@ public class Program
         );
 
         builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
+        builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddSingleton<
+            IMapper<TransactionDto, TransactionModel>,
+            TransactionApiMapper
+        >();
+        builder.Services.AddSingleton<
+            IMapper<TransactionModel, Transaction>,
+            TransactionBusinessMapper
+        >();
         builder.Services.AddSingleton<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<
             IProofOfWorkServiceFactory<ProofOfWorkServiceArgs>,
             ProofOfWorkServiceFactory
         >();
-        builder.Services.AddSingleton<IBlockchainService<Block>, BlockchainService>();
+        builder.Services.AddSingleton<IBlockchainService<BlockModel>, BlockchainService>();
         builder.Services.AddSingleton<IMinerService, MinerService>();
 
         var app = builder.Build();

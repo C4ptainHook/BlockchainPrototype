@@ -1,6 +1,6 @@
 namespace Blockchain.Business.Models;
 
-public record Block
+public record BlockModel
 {
     public int Index { get; init; }
     public DateTime TimeStamp { get; init; }
@@ -8,7 +8,7 @@ public record Block
     public ICollection<TransactionModel>? Transactions { get; init; }
     public string? PreviousHash { get; init; }
 
-    public Block(
+    public BlockModel(
         object content,
         BlockArgs args,
         ICollection<TransactionModel>? transactions = default

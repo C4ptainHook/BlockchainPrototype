@@ -9,11 +9,11 @@ dotnet husky run --name dotnet-format-staged
 echo "Formatting finished"
 
 echo "Build started"
-dotnet build --no-restore
+dotnet build src/BlockchainModel.sln --no-restore
 echo "Build finished"
 
 echo "Test started"
-dotnet test --no-restore
+dotnet test src/BlockchainModel.sln --no-restore
 echo "Test finished"
 
 

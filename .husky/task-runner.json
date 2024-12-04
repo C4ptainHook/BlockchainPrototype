@@ -13,7 +13,7 @@
       {
          "name": "dotnet-format-staged",
          "command": "dotnet",
-         "args": ["format", "--include", "${staged}"],
+         "args": ["format", "src/BlockchainModel.sln", "--include", "${staged}"],
          "include": ["**/*.cs"]
       }
    ]
