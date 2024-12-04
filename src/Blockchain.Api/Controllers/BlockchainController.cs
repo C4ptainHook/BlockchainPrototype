@@ -1,4 +1,3 @@
-using Blockchain.Business.Interfaces;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,22 +8,18 @@ namespace Blockchain.Api.Controllers;
 [Route("api/v1.0/[controller]")]
 public class BlockchainController : Controller
 {
+    private readonly ILogger<BlockchainController> _logger;
+    public BlockchainController(ILogger<BlockchainController> logger)
+    {
+        _logger = logger;
+    }
+
     [HttpGet("chain")]
     public ActionResult<IReadOnlyCollection<Block>> GetFullChain(
         IBlockchainService<Block> blockchain
     )
     {
         return Ok(blockchain.CheckChain());
-    }
-
-    [HttpPost("transactions/new")]
-    public async Task<IActionResult> AddTransaction(
-        ITransactionService transactionService,
-        TransactionModel transaction
-    )
-    {
-        await transactionService.AddAsync(transaction);
-        return Ok();
     }
 
     [HttpPost("mine")]
