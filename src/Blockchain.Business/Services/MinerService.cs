@@ -49,7 +49,7 @@ public class MinerService : IMinerService
                 newBlock = new BlockModel(
                     new object(),
                     blockArgs,
-                    [new TransactionModel(0, 0, reward)]
+                    [new TransactionModel("0", "0", reward)]
                 );
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {

@@ -2,13 +2,13 @@ namespace Blockchain.Business.Models;
 
 public record TransactionModel
 {
-    public int Sender { get; init; }
-    public int Recipient { get; init; }
+    public string Sender { get; init; }
+    public string Recipient { get; init; }
     public decimal Amount { get; init; }
 
     public DateTime TimeStamp { get; init; }
 
-    public TransactionModel(int sender, int recipient, decimal amount)
+    public TransactionModel(string sender, string recipient, decimal amount)
     {
         Sender = sender;
         Recipient = recipient;
