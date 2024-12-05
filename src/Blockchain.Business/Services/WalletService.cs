@@ -17,7 +17,7 @@ public class WalletService : IWalletService
         _mapper = mapper;
     }
 
-    public async Task AddWalletAsync(WalletModel wallet)
+    public async Task AddAsync(WalletModel wallet)
     {
         var walletEntity = _mapper.Map(wallet);
         await _unitOfWork

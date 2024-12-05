@@ -68,6 +68,7 @@ public class Program
         builder.Services.AddSingleton<IMinerService, MinerService>();
 
         builder.Services.AddSingleton<IMapper<WalletModel, Wallet>, WalletBusinessMapper>();
+        builder.Services.AddSingleton<IMapper<WalletDto, WalletModel>, WalletApiMapper>();
         builder.Services.AddSingleton<IWalletService, WalletService>();
 
         var app = builder.Build();

@@ -8,5 +8,5 @@ namespace Blockchain.Business.Interfaces.Transactions;
 
 public interface IWalletService
 {
-    Task AddWalletAsync(WalletModel wallet);
+    Task AddAsync(WalletModel wallet);
 }
