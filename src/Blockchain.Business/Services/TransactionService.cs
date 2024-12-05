@@ -1,4 +1,4 @@
-using Blockchain.Business.Interfaces;
+using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
 using Blockchain.Data.Entities;
@@ -13,7 +13,6 @@ public class TransactionService(
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper<TransactionModel, Transaction> _mapper = mapper;
-    private static object _lock = new();
 
     public async Task AddAsync(TransactionModel transaction)
     {

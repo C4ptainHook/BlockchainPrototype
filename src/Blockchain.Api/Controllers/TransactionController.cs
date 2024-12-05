@@ -1,5 +1,5 @@
 using Blockchain.Api.DTOs;
-using Blockchain.Business.Interfaces;
+using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 using Blockchain.Business.Models;
 
-namespace Blockchain.Business.Interfaces;
+namespace Blockchain.Business.Interfaces.Transactions;
 
 public interface ITransactionService
 {

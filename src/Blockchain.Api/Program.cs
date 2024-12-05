@@ -1,8 +1,8 @@
 using Blockchain.Api.DTOs;
 using Blockchain.Api.Mappers;
-using Blockchain.Business.Interfaces;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.PoW;
+using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Interfaces.Utils;
 using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
@@ -66,6 +66,9 @@ public class Program
         builder.Services.AddSingleton<IMapper<BlockModel, Block>, BlockBusinessMapper>();
         builder.Services.AddSingleton<IBlockchainService<BlockModel>, BlockchainService>();
         builder.Services.AddSingleton<IMinerService, MinerService>();
+
+        builder.Services.AddSingleton<IMapper<WalletModel, Wallet>, WalletBusinessMapper>();
+        builder.Services.AddSingleton<IWalletService, WalletService>();
 
         var app = builder.Build();
 
