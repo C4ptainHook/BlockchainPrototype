@@ -22,7 +22,5 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         builder.HasOne(t => t.Recipient).WithMany().HasForeignKey(t => t.RecipientId);
 
         builder.HasOne(t => t.Sender).WithMany().HasForeignKey(t => t.SenderId);
-
-        builder.HasOne(t => t.Block).WithMany(b => b.Transactions).HasForeignKey(t => t.BlockId);
     }
 }

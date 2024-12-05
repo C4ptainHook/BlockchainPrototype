@@ -13,10 +13,9 @@ public class BlockConfiguration : IEntityTypeConfiguration<Block>
         builder.ToCollection("Blocks");
         builder.HasKey(b => b.Id);
 
+        builder.Property(b => b.Index).HasElementName("index");
         builder.Property(b => b.TimeStamp).HasElementName("timestamp");
         builder.Property(b => b.Proof).HasElementName("proof");
         builder.Property(b => b.PreviousHash).HasElementName("previous_hash");
-
-        builder.HasMany(b => b.Transactions).WithOne(t => t.Block).HasForeignKey(t => t.BlockId);
     }
 }

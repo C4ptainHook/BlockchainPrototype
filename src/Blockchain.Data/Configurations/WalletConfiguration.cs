@@ -12,6 +12,7 @@ public class WalletConfiguration : IEntityTypeConfiguration<Wallet>
         builder.ToCollection("Wallets");
         builder.HasKey(w => w.Id);
 
+        builder.Property(w => w.NickName).HasElementName("nick_name");
         builder.Property(w => w.Amount).HasElementName("amount");
     }
 }

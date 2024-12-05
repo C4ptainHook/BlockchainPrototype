@@ -11,7 +11,6 @@ public partial class TransactionBusinessMapper : IMapper<TransactionModel, Trans
 {
     [MapperIgnoreSource(nameof(Transaction.Id))]
     [MapperIgnoreSource(nameof(Transaction.BlockId))]
-    [MapperIgnoreSource(nameof(Transaction.Block))]
     [MapperIgnoreSource(nameof(Transaction.Sender))]
     [MapperIgnoreSource(nameof(Transaction.Recipient))]
     [MapProperty(nameof(Transaction.SenderId), nameof(TransactionModel.Sender))]
@@ -20,7 +19,6 @@ public partial class TransactionBusinessMapper : IMapper<TransactionModel, Trans
 
     [MapperIgnoreTarget(nameof(Transaction.Id))]
     [MapperIgnoreTarget(nameof(Transaction.BlockId))]
-    [MapperIgnoreTarget(nameof(Transaction.Block))]
     [MapperIgnoreTarget(nameof(Transaction.Sender))]
     [MapperIgnoreTarget(nameof(Transaction.Recipient))]
     [MapProperty(nameof(TransactionModel.Sender), nameof(Transaction.SenderId))]

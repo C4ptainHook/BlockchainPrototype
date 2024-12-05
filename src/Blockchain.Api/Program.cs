@@ -63,6 +63,7 @@ public class Program
             IProofOfWorkServiceFactory<ProofOfWorkServiceArgs>,
             ProofOfWorkServiceFactory
         >();
+        builder.Services.AddSingleton<IMapper<BlockModel, Block>, BlockBusinessMapper>();
         builder.Services.AddSingleton<IBlockchainService<BlockModel>, BlockchainService>();
         builder.Services.AddSingleton<IMinerService, MinerService>();
 

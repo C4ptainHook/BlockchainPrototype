@@ -1,41 +1,54 @@
 using System.Collections;
 using Blockchain.Business.Interfaces.Mining;
+using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
+using Blockchain.Data.Entities;
+using Blockchain.Data.Interfaces;
 
 namespace Blockchain.Business.Services;
 
 public class BlockchainService : IBlockchainService<BlockModel>
 {
-    private readonly List<BlockModel> _chain = [];
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper<BlockModel, Block> _mapper;
 
-    public int LastIndex => _chain.Count - 1;
-    public BlockModel? LastBlock
+    public BlockchainService(IUnitOfWork unitOfWork, IMapper<BlockModel, Block> mapper)
     {
-        get => _chain?.LastOrDefault()!;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
-    public BlockModel this[int index]
+    public async Task<BlockModel?> GetLastBlockAsync()
     {
-        get { return _chain[index]; }
+        var blockchain = await _unitOfWork
+            .GetRepository<IBlockchainRepository<Block>>($"BlockchainRepository")
+            .GetAllAsync();
+        var lastBlock = blockchain.LastOrDefault();
+        return lastBlock is null ? null : _mapper.Map(lastBlock);
     }
 
-    public void AddBlock(BlockModel newBlock)
+    public async Task AddBlockAsync(BlockModel newBlock)
     {
-        _chain.Add(newBlock);
+        var newblockEntity = _mapper.Map(newBlock);
+        await _unitOfWork
+            .GetRepository<IBlockchainRepository<Block>>($"BlockchainRepository")
+            .AddAsync(newblockEntity);
+        await _unitOfWork.CommitAsync();
     }
 
-    public IReadOnlyCollection<BlockModel> CheckChain()
+    public async Task<IEnumerable<BlockModel>> GetFullChainAsync()
     {
-        return _chain.AsReadOnly<BlockModel>();
+        IEnumerable<Block> blockEntities = await _unitOfWork
+            .GetRepository<IBlockchainRepository<Block>>($"BlockchainRepository")
+            .GetAllAsync();
+        return _mapper.Map(blockEntities);
     }
 
-    public IEnumerator<BlockModel> GetEnumerator()
+    public async Task<int> GetChainLength()
     {
-        return _chain.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
+        var blockchain = await _unitOfWork
+            .GetRepository<IBlockchainRepository<Block>>($"BlockchainRepository")
+            .GetAllAsync();
+        return blockchain is null ? 0 : blockchain.Count();
     }
 }

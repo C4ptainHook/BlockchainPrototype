@@ -1,11 +1,10 @@
 namespace Blockchain.Business.Interfaces.Mining;
 
-public interface IBlockchainService<TBlockType> : IEnumerable<TBlockType>
+public interface IBlockchainService<TBlockType>
     where TBlockType : class
 {
-    TBlockType? LastBlock { get; }
-    public TBlockType this[int index] { get; }
-    public int LastIndex { get; }
-    void AddBlock(TBlockType newBlock);
-    IReadOnlyCollection<TBlockType> CheckChain();
+    Task<TBlockType?> GetLastBlockAsync();
+    Task AddBlockAsync(TBlockType newBlock);
+    Task<int> GetChainLength();
+    Task<IEnumerable<TBlockType>> GetFullChainAsync();
 }

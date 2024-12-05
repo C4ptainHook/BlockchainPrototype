@@ -26,7 +26,7 @@ public class ProofOfWorkService(
         blockAsString
             .Append(blockToProve.Index)
             .Append(blockToProve.TimeStamp)
-            .Append(blockToProve.Transactions)
+            .Append(blockToProve.TransactionIds)
             .Append(blockToProve.Proof)
             .Append(blockToProve.PreviousHash);
 

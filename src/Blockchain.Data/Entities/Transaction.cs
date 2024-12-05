@@ -11,7 +11,6 @@ public class Transaction : BaseEntity
     public Wallet Recipient { get; set; }
     public Wallet Sender { get; set; }
     public ObjectId? BlockId { get; set; }
-    public Block? Block { get; set; }
 
     public Transaction()
     {

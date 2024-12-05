@@ -16,11 +16,11 @@ public class BlockchainController : Controller
     }
 
     [HttpGet("chain")]
-    public ActionResult<IReadOnlyCollection<BlockModel>> GetFullChain(
+    public async Task<ActionResult<IReadOnlyCollection<BlockModel>>> GetFullChain(
         IBlockchainService<BlockModel> blockchain
     )
     {
-        return Ok(blockchain.CheckChain());
+        return Ok(await blockchain.GetFullChainAsync());
     }
 
     [HttpPost("mine")]
