@@ -2,7 +2,7 @@ using Blockchain.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Blockchain.Data.EntitiesConfiguration;
+namespace Blockchain.Data.Configuration;
 
 public class BlockConfiguration : IEntityTypeConfiguration<Block>
 {

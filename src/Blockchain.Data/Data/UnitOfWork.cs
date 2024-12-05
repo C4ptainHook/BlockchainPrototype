@@ -33,7 +33,10 @@ public class UnitOfWork : IUnitOfWork
             var name =
                 attribute?.Name
                 ?? throw new ArgumentNullException($"{type.Name} attribute naming violation");
-            var instance = Activator.CreateInstance(type, _context);
+            var instance =
+                Activator.CreateInstance(type, _context)
+                ?? throw new NullReferenceException($"{type.Name} instance creation failed");
+            _repositories.Add(name, instance);
         }
     }
 

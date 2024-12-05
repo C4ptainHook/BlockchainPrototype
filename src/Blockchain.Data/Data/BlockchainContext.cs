@@ -1,5 +1,7 @@
+using Blockchain.Data.Configuration;
 using Blockchain.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Blockchain.Data;
 
@@ -14,7 +16,6 @@ public class BlockchainContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(BlockchainContext).Assembly);
     }
 }
