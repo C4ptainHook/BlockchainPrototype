@@ -67,9 +67,9 @@ public class Program
         builder.Services.AddSingleton<IBlockchainService<BlockModel>, BlockchainService>();
         builder.Services.AddSingleton<IMinerService, MinerService>();
 
-        builder.Services.AddSingleton<IMapper<WalletModel, Wallet>, WalletBusinessMapper>();
-        builder.Services.AddSingleton<IMapper<WalletDto, WalletModel>, WalletApiMapper>();
         builder.Services.AddSingleton<IWalletService, WalletService>();
+        builder.Services.AddSingleton<IMapper<WalletDto, WalletModel>, WalletApiMapper>();
+        builder.Services.AddSingleton<IMapper<WalletModel, Wallet>, WalletBusinessMapper>();
 
         var app = builder.Build();
 

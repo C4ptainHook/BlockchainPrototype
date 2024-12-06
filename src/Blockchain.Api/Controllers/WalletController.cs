@@ -1,5 +1,4 @@
 using Blockchain.Api.DTOs;
-using Blockchain.Api.Mappers;
 using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blockchain.Api.Controllers;
 
+[ApiController]
 [Route("api/v1.0/[controller]")]
 public class WalletController : Controller
 {

@@ -30,7 +30,7 @@ public class BlockchainRepository : IBlockchainRepository<Block>
         return await _context.Blocks.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Block> GetByIdAsync(int id)
+    public async Task<Block> GetByIdAsync(string id)
     {
         return await _context.Blocks.FindAsync(id)
             ?? throw new KeyNotFoundException(

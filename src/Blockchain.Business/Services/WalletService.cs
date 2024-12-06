@@ -6,16 +6,11 @@ using Blockchain.Data.Interfaces;
 
 namespace Blockchain.Business.Services;
 
-public class WalletService : IWalletService
+public class WalletService(IUnitOfWork unitOfWork, IMapper<WalletModel, Wallet> mapper)
+    : IWalletService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper<WalletModel, Wallet> _mapper;
-
-    public WalletService(IUnitOfWork unitOfWork, IMapper<WalletModel, Wallet> mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMapper<WalletModel, Wallet> _mapper = mapper;
 
     public async Task AddAsync(WalletModel wallet)
     {

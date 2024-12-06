@@ -30,7 +30,7 @@ public class TransactionRepository : ITransactionRepository<Transaction>
         return await _context.Transactions.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Transaction> GetByIdAsync(int id)
+    public async Task<Transaction> GetByIdAsync(string id)
     {
         return await _context.Transactions.FindAsync(id)
             ?? throw new KeyNotFoundException(
