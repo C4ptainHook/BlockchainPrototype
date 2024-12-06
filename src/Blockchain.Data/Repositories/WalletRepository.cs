@@ -42,6 +42,14 @@ public class WalletRepository : IWalletRepository<Wallet>
             );
     }
 
+    public async Task<Wallet> GetByNickNameAsync(string nickName)
+    {
+        return await _context.Wallets.FirstOrDefaultAsync(w => w.NickName == nickName)
+            ?? throw new KeyNotFoundException(
+                $"{typeof(Wallet).Name} entity with nickname:{nickName} not found"
+            );
+    }
+
     public void Remove(Wallet entity)
     {
         _context.Wallets.Remove(entity);

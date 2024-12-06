@@ -1,3 +1,4 @@
+using Blockchain.Api.DTOs;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,9 @@ public class BlockchainController : Controller
     }
 
     [HttpPost("mine")]
-    public async Task<ActionResult> MineBlock(IMinerService miner)
+    public async Task<ActionResult> MineBlock(IMinerService miner, WalletDto wallet)
     {
-        await miner.MineBlockAsync();
+        await miner.MineBlockAsync(wallet.NickName);
         return Ok();
     }
 }

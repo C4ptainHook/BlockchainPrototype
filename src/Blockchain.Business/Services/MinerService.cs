@@ -2,6 +2,7 @@ using Blockchain.Business.Extensions;
 using Blockchain.Business.Interfaces;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.PoW;
+using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Models;
 using Blockchain.Business.Resources;
 using Microsoft.Extensions.Logging;
@@ -12,30 +13,36 @@ public class MinerService : IMinerService
 {
     private readonly IProofOfWorkService _proofOfWork;
     private readonly ILogger<IMinerService> _logger;
-    public IBlockchainService<BlockModel> _blockchain { get; }
+    private readonly IBlockchainService<BlockModel> _blockchainService;
+    private readonly ITransactionService _transactionService;
+    private readonly IWalletService _walletService;
     private readonly Func<int, decimal> _getReward;
 
     public MinerService(
-        IBlockchainService<BlockModel> blockchain,
+        IBlockchainService<BlockModel> blockchainService,
         IProofOfWorkServiceFactory<ProofOfWorkServiceArgs> proofOfWorkFactory,
+        ITransactionService transactionService,
+        IWalletService walletService,
         ILogger<IMinerService> logger
     )
     {
-        _blockchain = blockchain;
+        _blockchainService = blockchainService;
+        _transactionService = transactionService;
+        _walletService = walletService;
         var proofOfWorkArgs = new ProofOfWorkServiceArgs(TBConfig.DD, int.Parse(TBConfig.MMYYYY));
         _proofOfWork = proofOfWorkFactory.CreateProofOfWork(proofOfWorkArgs);
         _logger = logger;
         _getReward = CalculateReward(int.Parse(TBConfig.YYYY));
     }
 
-    public async Task<BlockModel> MineBlockAsync()
+    public async Task<BlockModel> MineBlockAsync(string walletNickName)
     {
         return await Task.Run(async () =>
         {
             var nonce = int.Parse(TBConfig.DD + TBConfig.MM);
             var minedSuccesfully = false;
-            BlockModel? lastBlock = await _blockchain.GetLastBlockAsync()!;
-            var newBlockIndex = await _blockchain.GetChainLength();
+            BlockModel? lastBlock = await _blockchainService.GetLastBlockAsync()!;
+            var newBlockIndex = await _blockchainService.GetChainLength();
             var lastBlockHash = _proofOfWork.GetHash(lastBlock) ?? string.Empty;
             var iteration = 0;
             var reward = _getReward(newBlockIndex);
@@ -45,21 +52,20 @@ public class MinerService : IMinerService
             {
                 var blockArgs = new BlockArgs(newBlockIndex, DateTime.Now, nonce, lastBlockHash);
                 newBlock = new BlockModel(
-                    new object(),
                     blockArgs,
                     // [new TransactionModel("0", "0", reward)]
                     null //TODO: Implement feature
                 );
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
-                    await _blockchain.AddBlockAsync(newBlock);
+                    await _blockchainService.AddBlockAsync(newBlock);
                     _logger.LogInformation(
                         "Block {newBlockIndex} mined after {iteration} iterations",
                         newBlockIndex,
                         iteration
                     );
                     _logger.LogInformation("Proof number: {proof}", nonce);
-                    BlockModel? currentBlock = await _blockchain.GetLastBlockAsync()!;
+                    BlockModel? currentBlock = await _blockchainService.GetLastBlockAsync()!;
                     var currentHash =
                         _proofOfWork.GetHash(currentBlock)
                         ?? throw new InvalidOperationException("Block could not be mined");

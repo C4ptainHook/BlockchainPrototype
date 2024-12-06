@@ -10,7 +10,7 @@ public record BlockModel
 
     public BlockModel() { }
 
-    public BlockModel(object content, BlockArgs args, ICollection<string>? transactionIds = default)
+    public BlockModel(BlockArgs args, ICollection<string>? transactionIds = default)
     {
         Index = args.Index;
         TimeStamp = args.TimeStamp;
