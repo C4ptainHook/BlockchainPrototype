@@ -6,6 +6,7 @@ using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Models;
 using Blockchain.Business.Resources;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 namespace Blockchain.Business.Services;
 
@@ -47,15 +48,18 @@ public class MinerService : IMinerService
             var iteration = 0;
             var reward = _getReward(newBlockIndex);
             BlockModel newBlock = default!;
+            var walletId = await _walletService.GetIdByNickNameAsync(walletNickName);
+            var coinbaseTransaction = await _transactionService.AddAsync(
+                new TransactionModel(walletId, walletId, reward)
+            );
+            var transactionIds = new HashSet<string>() { coinbaseTransaction.Id };
+
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
             while (!minedSuccesfully)
             {
                 var blockArgs = new BlockArgs(newBlockIndex, DateTime.Now, nonce, lastBlockHash);
-                newBlock = new BlockModel(
-                    blockArgs,
-                    // [new TransactionModel("0", "0", reward)]
-                    null //TODO: Implement feature
-                );
+
+                newBlock = new BlockModel(blockArgs, transactionIds.ToArray());
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
                     await _blockchainService.AddBlockAsync(newBlock);

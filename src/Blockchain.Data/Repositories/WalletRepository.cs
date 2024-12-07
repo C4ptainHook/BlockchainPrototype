@@ -19,9 +19,10 @@ public class WalletRepository : IWalletRepository<Wallet>
         _context = context;
     }
 
-    public async Task AddAsync(Wallet entity)
+    public async Task<Wallet> AddAsync(Wallet entity)
     {
         await _context.Wallets.AddAsync(entity);
+        return entity;
     }
 
     public async Task AddRangeAsync(IEnumerable<Wallet> entities)

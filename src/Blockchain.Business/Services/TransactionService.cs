@@ -14,13 +14,14 @@ public class TransactionService(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper<TransactionModel, Transaction> _mapper = mapper;
 
-    public async Task AddAsync(TransactionModel transaction)
+    public async Task<TransactionModel> AddAsync(TransactionModel transaction)
     {
         var transactionEntity = _mapper.Map(transaction);
         await _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
             .AddAsync(transactionEntity);
         await _unitOfWork.CommitAsync();
+        return _mapper.Map(transactionEntity);
     }
 
     public async Task<IEnumerable<TransactionModel>> Get(int? numberOfTransactions = null)

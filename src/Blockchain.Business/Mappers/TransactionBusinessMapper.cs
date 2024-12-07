@@ -9,7 +9,6 @@ namespace Blockchain.Business.Mappers;
 [Mapper]
 public partial class TransactionBusinessMapper : IMapper<TransactionModel, Transaction>
 {
-    [MapperIgnoreSource(nameof(Transaction.Id))]
     [MapperIgnoreSource(nameof(Transaction.BlockId))]
     [MapperIgnoreSource(nameof(Transaction.Sender))]
     [MapperIgnoreSource(nameof(Transaction.Recipient))]
@@ -18,6 +17,7 @@ public partial class TransactionBusinessMapper : IMapper<TransactionModel, Trans
     public partial TransactionModel Map(Transaction transaction);
 
     [MapperIgnoreTarget(nameof(Transaction.Id))]
+    [MapperIgnoreSource(nameof(TransactionModel.Id))]
     [MapperIgnoreTarget(nameof(Transaction.BlockId))]
     [MapperIgnoreTarget(nameof(Transaction.Sender))]
     [MapperIgnoreTarget(nameof(Transaction.Recipient))]
@@ -27,6 +27,9 @@ public partial class TransactionBusinessMapper : IMapper<TransactionModel, Trans
 
     [UserMapping]
     private ObjectId IdToObjectId(string id) => new ObjectId(id);
+
+    [UserMapping]
+    private string ObjectIdToId(ObjectId id) => id.ToString();
 
     public partial IEnumerable<TransactionModel> Map(IEnumerable<Transaction> transactions);
 

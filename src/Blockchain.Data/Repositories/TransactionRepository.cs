@@ -15,9 +15,10 @@ public class TransactionRepository : ITransactionRepository<Transaction>
         _context = context;
     }
 
-    public async Task AddAsync(Transaction entity)
+    public async Task<Transaction> AddAsync(Transaction entity)
     {
         await _context.Transactions.AddAsync(entity);
+        return entity;
     }
 
     public async Task AddRangeAsync(IEnumerable<Transaction> entities)

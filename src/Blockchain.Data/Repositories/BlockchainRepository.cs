@@ -15,9 +15,10 @@ public class BlockchainRepository : IBlockchainRepository<Block>
         _context = context;
     }
 
-    public async Task AddAsync(Block entity)
+    public async Task<Block> AddAsync(Block entity)
     {
         await _context.Blocks.AddAsync(entity);
+        return entity;
     }
 
     public async Task AddRangeAsync(IEnumerable<Block> entities)
