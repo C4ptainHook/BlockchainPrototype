@@ -16,6 +16,7 @@ public class MinerService : IMinerService
     private readonly ILogger<IMinerService> _logger;
     private readonly IBlockchainService<BlockModel> _blockchainService;
     private readonly ITransactionService _transactionService;
+    private readonly ITransactionHashingService _transactionHashingService;
     private readonly IWalletService _walletService;
     private readonly Func<int, decimal> _getReward;
 
@@ -23,12 +24,14 @@ public class MinerService : IMinerService
         IBlockchainService<BlockModel> blockchainService,
         IProofOfWorkServiceFactory<ProofOfWorkServiceArgs> proofOfWorkFactory,
         ITransactionService transactionService,
+        ITransactionHashingService transactionHashingService,
         IWalletService walletService,
         ILogger<IMinerService> logger
     )
     {
         _blockchainService = blockchainService;
         _transactionService = transactionService;
+        _transactionHashingService = transactionHashingService;
         _walletService = walletService;
         var proofOfWorkArgs = new ProofOfWorkServiceArgs(TBConfig.DD, int.Parse(TBConfig.MMYYYY));
         _proofOfWork = proofOfWorkFactory.CreateProofOfWork(proofOfWorkArgs);
@@ -52,14 +55,23 @@ public class MinerService : IMinerService
             var coinbaseTransaction = await _transactionService.AddAsync(
                 new TransactionModel(walletId, walletId, reward)
             );
-            var transactionIds = new HashSet<string>() { coinbaseTransaction.Id };
+            var mempool = new Dictionary<string, string>()
+            {
+                {
+                    coinbaseTransaction.Id,
+                    _transactionHashingService.GetTransactionHash(coinbaseTransaction)
+                },
+            };
 
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
             while (!minedSuccesfully)
             {
                 var blockArgs = new BlockArgs(newBlockIndex, DateTime.Now, nonce, lastBlockHash);
 
-                newBlock = new BlockModel(blockArgs, transactionIds.ToArray());
+                newBlock = new BlockModel(
+                    blockArgs,
+                    _transactionHashingService.GetMerkleRoot(mempool.Values)
+                );
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
                     await _blockchainService.AddBlockAsync(newBlock);

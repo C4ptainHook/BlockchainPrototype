@@ -9,10 +9,12 @@ namespace Blockchain.Api.Mappers;
 public partial class TransactionApiMapper : IMapper<TransactionDto, TransactionModel>
 {
     [MapperIgnoreTarget(nameof(TransactionModel.Id))]
+    [MapperIgnoreTarget(nameof(TransactionModel.BlockId))]
     [MapperIgnoreTarget(nameof(TransactionModel.TimeStamp))]
     public partial TransactionModel Map(TransactionDto from);
 
     [MapperIgnoreSource(nameof(TransactionModel.Id))]
+    [MapperIgnoreSource(nameof(TransactionModel.BlockId))]
     [MapperIgnoreSource(nameof(TransactionModel.TimeStamp))]
     public partial TransactionDto Map(TransactionModel to);
 

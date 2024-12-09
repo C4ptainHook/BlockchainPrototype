@@ -5,17 +5,17 @@ public record BlockModel
     public int Index { get; init; }
     public DateTime TimeStamp { get; init; }
     public int Proof { get; init; }
-    public ICollection<string>? TransactionIds { get; init; }
+    public string MerkleRoot { get; init; }
     public string? PreviousHash { get; init; }
 
     public BlockModel() { }
 
-    public BlockModel(BlockArgs args, ICollection<string>? transactionIds = default)
+    public BlockModel(BlockArgs args, string merkleRoot)
     {
         Index = args.Index;
         TimeStamp = args.TimeStamp;
         Proof = args.Proof;
         PreviousHash = args.PreviousHash;
-        TransactionIds = transactionIds;
+        MerkleRoot = merkleRoot;
     }
 }

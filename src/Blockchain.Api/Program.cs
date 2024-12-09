@@ -70,6 +70,7 @@ public class Program
         builder.Services.AddSingleton<IWalletService, WalletService>();
         builder.Services.AddSingleton<IMapper<WalletDto, WalletModel>, WalletApiMapper>();
         builder.Services.AddSingleton<IMapper<WalletModel, Wallet>, WalletBusinessMapper>();
+        builder.Services.AddSingleton<ITransactionHashingService, TransactionHashingService>();
 
         var app = builder.Build();
 
