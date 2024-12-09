@@ -53,7 +53,7 @@ public class MinerService : IMinerService
             BlockModel newBlock = default!;
             var walletId = await _walletService.GetIdByNickNameAsync(walletNickName);
             var coinbaseTransaction = await _transactionService.AddAsync(
-                new TransactionModel(walletId, walletId, reward)
+                new TransactionModel(string.Empty, walletId, reward)
             );
             var mempool = new Dictionary<string, string>()
             {

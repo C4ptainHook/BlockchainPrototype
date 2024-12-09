@@ -24,7 +24,14 @@ public partial class TransactionBusinessMapper : IMapper<TransactionModel, Trans
     public partial Transaction Map(TransactionModel transactionModel);
 
     [UserMapping]
-    private ObjectId IdToObjectId(string id) => new ObjectId(id);
+    private ObjectId IdToObjectId(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            return ObjectId.Empty;
+        }
+        return new ObjectId(id);
+    }
 
     [UserMapping]
     private string ObjectIdToId(ObjectId id) => id.ToString();
