@@ -14,7 +14,10 @@ public class BlockchainContext : DbContext
     public required DbSet<Wallet> Wallets { get; set; }
 
     public BlockchainContext(DbContextOptions<BlockchainContext> options)
-        : base(options) { }
+        : base(options)
+    {
+        Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
