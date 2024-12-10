@@ -6,4 +6,5 @@ public interface IWalletService
 {
     Task AddAsync(WalletModel wallet);
     Task<WalletModel> GetByNickNameAsync(string nickName);
+    Task UpdateAsync(WalletModel wallet);
 }

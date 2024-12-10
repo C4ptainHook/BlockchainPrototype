@@ -29,4 +29,13 @@ public class WalletService(IUnitOfWork unitOfWork, IMapper<WalletModel, Wallet> 
 
         return _mapper.Map(wallet);
     }
+
+    public async Task UpdateAsync(WalletModel wallet)
+    {
+        var walletEntity = _mapper.Map(wallet);
+        _unitOfWork
+            .GetRepository<IWalletRepository<Wallet>>($"{nameof(Wallet)}Repository")
+            .Update(walletEntity);
+        await _unitOfWork.CommitAsync();
+    }
 }

@@ -13,7 +13,7 @@ public class WalletConfiguration : IEntityTypeConfiguration<Wallet>
         builder.HasKey(w => w.Id);
 
         builder.Property(w => w.NickName).HasElementName("nick_name");
-        builder.Property(w => w.Amount).HasElementName("amount");
+        builder.Property(w => w.Balance).HasElementName("amount");
         builder.HasIndex(w => w.NickName).IsUnique();
     }
 }

@@ -101,7 +101,8 @@ public class MinerService : IMinerService
                         transaction.BlockId = newBlock.Id;
                         await _transactionService.UpdateAsync(transaction);
                     }
-                    await _transactionService.UpdateAsync(coinbaseTransaction);
+                    wallet.UpdateBalance(reward);
+                    await _walletService.UpdateAsync(wallet);
                 }
                 nonce = _proofOfWork.GetNewNonce();
                 iteration++;

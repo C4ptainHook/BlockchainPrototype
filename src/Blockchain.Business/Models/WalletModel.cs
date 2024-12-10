@@ -8,11 +8,15 @@ namespace Blockchain.Business.Models;
 public record WalletModel : BaseModel
 {
     public string NickName { get; init; }
-    public decimal Amount { get; init; }
+    public decimal Balance { get; private set; }
 
     public WalletModel(string nickName)
     {
         NickName = nickName;
-        Amount = default;
+        Balance = default;
+    }
+    public void UpdateBalance(decimal amount)
+    {
+        Balance += amount;
     }
 }
