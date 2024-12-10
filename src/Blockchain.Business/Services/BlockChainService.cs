@@ -23,7 +23,8 @@ public class BlockchainService : IBlockchainService<BlockModel>
         var blockchain = await _unitOfWork
             .GetRepository<IBlockchainRepository<Block>>($"BlockchainRepository")
             .GetAllAsync();
-        return !blockchain.Any() ? null : _mapper.Map(blockchain.OrderBy(b => b.Index).Last());
+        var lastBlock = blockchain.LastOrDefault();
+        return lastBlock is null ? null : _mapper.Map(lastBlock);
     }
 
     public async Task<BlockModel> AddBlockAsync(BlockModel newBlock)

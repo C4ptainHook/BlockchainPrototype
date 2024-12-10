@@ -9,16 +9,19 @@ namespace Blockchain.Business.Utils;
 public class ProofOfWorkServiceFactory : IProofOfWorkServiceFactory<ProofOfWorkServiceArgs>
 {
     private readonly IRandomNumerical<int> _random;
-    private readonly ICultureService _cultureService;
+    private readonly ILogger<IProofOfWorkService> _logger;
 
-    public ProofOfWorkServiceFactory(ICultureService cultureService, IRandomNumerical<int> random)
+    public ProofOfWorkServiceFactory(
+        IRandomNumerical<int> random,
+        ILogger<IProofOfWorkService> logger
+    )
     {
         _random = random;
-        _cultureService = cultureService;
+        _logger = logger;
     }
 
     public IProofOfWorkService CreateProofOfWork(ProofOfWorkServiceArgs args)
     {
-        return new ProofOfWorkService(_cultureService, _random, args);
+        return new ProofOfWorkService(_random, args, _logger);
     }
 }
