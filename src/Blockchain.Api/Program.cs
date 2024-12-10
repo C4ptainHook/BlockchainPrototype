@@ -48,6 +48,7 @@ public class Program
             (context, configuration) => configuration.ReadFrom.Configuration(context.Configuration)
         );
 
+        builder.Services.AddTransient<ICultureService, CultureService>();
         builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
         builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
         builder.Services.AddSingleton<
