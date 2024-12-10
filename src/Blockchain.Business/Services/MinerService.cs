@@ -20,7 +20,7 @@ public class MinerService : IMinerService
 
     public MinerService(
         IBlockchainService<BlockModel> blockchainService,
-        IProofOfWorkServiceFactory<ProofOfWorkServiceArgs> proofOfWorkFactory,
+        IProofOfWorkServiceFactory<ProofOfWorkServiceArgsModel> proofOfWorkFactory,
         ITransactionService transactionService,
         ITransactionHashingService transactionHashingService,
         IWalletService walletService,
@@ -31,7 +31,10 @@ public class MinerService : IMinerService
         _transactionService = transactionService;
         _transactionHashingService = transactionHashingService;
         _walletService = walletService;
-        var proofOfWorkArgs = new ProofOfWorkServiceArgs(TBConfig.DD, int.Parse(TBConfig.MMYYYY));
+        var proofOfWorkArgs = new ProofOfWorkServiceArgsModel(
+            TBConfig.DD,
+            int.Parse(TBConfig.MMYYYY)
+        );
         _proofOfWork = proofOfWorkFactory.CreateProofOfWork(proofOfWorkArgs);
         _logger = logger;
         _getReward = CalculateReward(int.Parse(TBConfig.YYYY));
@@ -49,9 +52,9 @@ public class MinerService : IMinerService
             var iteration = 0;
             var reward = _getReward(newBlockIndex);
             BlockModel newBlock = default!;
-            var walletId = await _walletService.GetIdByNickNameAsync(walletNickName);
+            var wallet = await _walletService.GetByNickNameAsync(walletNickName);
             var coinbaseTransaction = await _transactionService.AddAsync(
-                new TransactionModel(string.Empty, walletId, reward)
+                new TransactionModel(string.Empty, wallet.Id, reward)
             );
             var mempool = new Dictionary<string, TransactionModel>()
             {
@@ -64,7 +67,7 @@ public class MinerService : IMinerService
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
             while (!minedSuccesfully)
             {
-                var blockArgs = new BlockArgs(
+                var blockArgs = new BlockArgsModel(
                     newBlockIndex,
                     DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
                     nonce,

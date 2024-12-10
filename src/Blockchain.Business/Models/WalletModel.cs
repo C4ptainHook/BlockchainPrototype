@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Blockchain.Business.Models;
 
-public class WalletModel
+public record WalletModel : BaseModel
 {
     public string NickName { get; init; }
     public decimal Amount { get; init; }
@@ -13,6 +13,6 @@ public class WalletModel
     public WalletModel(string nickName)
     {
         NickName = nickName;
-        Amount = 0;
+        Amount = default;
     }
 }

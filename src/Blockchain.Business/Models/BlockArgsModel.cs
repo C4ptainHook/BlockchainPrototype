@@ -1,13 +1,13 @@
 namespace Blockchain.Business.Models;
 
-public readonly struct BlockArgs
+public readonly struct BlockArgsModel
 {
     public int Index { get; }
     public DateTime TimeStamp { get; }
     public int Proof { get; }
     public string? PreviousHash { get; }
 
-    public BlockArgs(int index, DateTime timeStamp, int proof, string? previousHash)
+    public BlockArgsModel(int index, DateTime timeStamp, int proof, string? previousHash)
     {
         Index = index;
         TimeStamp = timeStamp;

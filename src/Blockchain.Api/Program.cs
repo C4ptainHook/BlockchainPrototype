@@ -60,7 +60,7 @@ public class Program
         >();
         builder.Services.AddSingleton<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<
-            IProofOfWorkServiceFactory<ProofOfWorkServiceArgs>,
+            IProofOfWorkServiceFactory<ProofOfWorkServiceArgsModel>,
             ProofOfWorkServiceFactory
         >();
         builder.Services.AddSingleton<IMapper<BlockModel, Block>, BlockBusinessMapper>();

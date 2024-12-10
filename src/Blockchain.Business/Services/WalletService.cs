@@ -21,12 +21,12 @@ public class WalletService(IUnitOfWork unitOfWork, IMapper<WalletModel, Wallet> 
         await _unitOfWork.CommitAsync();
     }
 
-    public async Task<string> GetIdByNickNameAsync(string nickName)
+    public async Task<WalletModel> GetByNickNameAsync(string nickName)
     {
         var wallet = await _unitOfWork
             .GetRepository<IWalletRepository<Wallet>>($"{nameof(Wallet)}Repository")
             .GetByNickNameAsync(nickName);
 
-        return wallet.Id.ToString();
+        return _mapper.Map(wallet);
     }
 }

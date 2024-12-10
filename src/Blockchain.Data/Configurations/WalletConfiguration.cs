@@ -14,5 +14,6 @@ public class WalletConfiguration : IEntityTypeConfiguration<Wallet>
 
         builder.Property(w => w.NickName).HasElementName("nick_name");
         builder.Property(w => w.Amount).HasElementName("amount");
+        builder.HasIndex(w => w.NickName).IsUnique();
     }
 }

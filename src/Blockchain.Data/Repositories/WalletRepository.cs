@@ -60,4 +60,9 @@ public class WalletRepository : IWalletRepository<Wallet>
     {
         _context.Wallets.RemoveRange(entities);
     }
+
+    public void Update(Wallet entity)
+    {
+        _context.Wallets.Update(entity);
+    }
 }

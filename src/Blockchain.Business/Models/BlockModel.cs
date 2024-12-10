@@ -1,8 +1,7 @@
 namespace Blockchain.Business.Models;
 
-public record BlockModel
+public record BlockModel : BaseModel
 {
-    public string Id { get; init; }
     public int Index { get; init; }
     public DateTime TimeStamp { get; init; }
     public int Proof { get; init; }
@@ -11,7 +10,7 @@ public record BlockModel
 
     public BlockModel() { }
 
-    public BlockModel(BlockArgs args, string merkleRoot)
+    public BlockModel(BlockArgsModel args, string merkleRoot)
     {
         Index = args.Index;
         TimeStamp = args.TimeStamp;

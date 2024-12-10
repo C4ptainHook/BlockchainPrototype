@@ -1,8 +1,7 @@
 namespace Blockchain.Business.Models;
 
-public record TransactionModel
+public record TransactionModel : BaseModel
 {
-    public string Id { get; init; }
     public string Sender { get; init; }
     public string Recipient { get; init; }
     public decimal Amount { get; init; }

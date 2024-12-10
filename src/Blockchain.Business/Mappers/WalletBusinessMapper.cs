@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Threading.Tasks;
 using Blockchain.Business.Models;
 using Blockchain.Data.Entities;
 using Riok.Mapperly.Abstractions;
@@ -12,10 +7,10 @@ namespace Blockchain.Business.Mappers;
 [Mapper]
 public partial class WalletBusinessMapper : IMapper<WalletModel, Wallet>
 {
+    [MapperIgnoreSource(nameof(Wallet.Id))]
     [MapperIgnoreTarget(nameof(Wallet.Id))]
     public partial Wallet Map(WalletModel source);
 
-    [MapperIgnoreSource(nameof(Wallet.Id))]
     public partial WalletModel Map(Wallet source);
 
     public partial IEnumerable<Wallet> Map(IEnumerable<WalletModel> from);

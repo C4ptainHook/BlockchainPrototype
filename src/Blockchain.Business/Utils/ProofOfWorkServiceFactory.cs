@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Blockchain.Business.Utils;
 
-public class ProofOfWorkServiceFactory : IProofOfWorkServiceFactory<ProofOfWorkServiceArgs>
+public class ProofOfWorkServiceFactory : IProofOfWorkServiceFactory<ProofOfWorkServiceArgsModel>
 {
     private readonly IRandomNumerical<int> _random;
     private readonly ILogger<IProofOfWorkService> _logger;
@@ -20,7 +20,7 @@ public class ProofOfWorkServiceFactory : IProofOfWorkServiceFactory<ProofOfWorkS
         _logger = logger;
     }
 
-    public IProofOfWorkService CreateProofOfWork(ProofOfWorkServiceArgs args)
+    public IProofOfWorkService CreateProofOfWork(ProofOfWorkServiceArgsModel args)
     {
         return new ProofOfWorkService(_random, args, _logger);
     }

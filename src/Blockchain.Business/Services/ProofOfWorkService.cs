@@ -9,7 +9,7 @@ namespace Blockchain.Business.Services;
 
 public class ProofOfWorkService(
     IRandomNumerical<int> random,
-    ProofOfWorkServiceArgs args,
+    ProofOfWorkServiceArgsModel args,
     ILogger<IProofOfWorkService> logger
 ) : IProofOfWorkService
 {
