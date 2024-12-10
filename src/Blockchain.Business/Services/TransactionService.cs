@@ -24,7 +24,7 @@ public class TransactionService(
         return _mapper.Map(transactionEntity);
     }
 
-    public async Task<IEnumerable<TransactionModel>> Get(int? numberOfTransactions = null)
+    public async Task<IEnumerable<TransactionModel>> GetAttachedToTheBlock(string blockId = null!)
     {
         var transactionEntities = await _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
@@ -32,11 +32,12 @@ public class TransactionService(
         return _mapper.Map(transactionEntities);
     }
 
-    public async Task ClearAsync()
+    public async Task UpdateAsync(TransactionModel transaction)
     {
-        var transactions = await this.Get();
+        var transactionEntity = _mapper.Map(transaction);
         _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
-            .RemoveRange(_mapper.Map(transactions));
+            .Update(transactionEntity);
+        await _unitOfWork.CommitAsync();
     }
 }

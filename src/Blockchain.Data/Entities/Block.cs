@@ -8,5 +8,5 @@ public class Block : BaseEntity
     public DateTime TimeStamp { get; set; }
     public int Proof { get; set; }
     public string? PreviousHash { get; set; }
-    public ICollection<ObjectId>? TransactionIds { get; set; }
+    public required string MerkleRoot { get; set; }
 }

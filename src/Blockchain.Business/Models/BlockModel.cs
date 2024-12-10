@@ -2,6 +2,7 @@ namespace Blockchain.Business.Models;
 
 public record BlockModel
 {
+    public string Id { get; init; }
     public int Index { get; init; }
     public DateTime TimeStamp { get; init; }
     public int Proof { get; init; }

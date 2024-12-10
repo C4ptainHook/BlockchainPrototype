@@ -1,12 +1,10 @@
 using Blockchain.Business.Extensions;
-using Blockchain.Business.Interfaces;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.PoW;
 using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Models;
 using Blockchain.Business.Resources;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 
 namespace Blockchain.Business.Services;
 
@@ -55,11 +53,11 @@ public class MinerService : IMinerService
             var coinbaseTransaction = await _transactionService.AddAsync(
                 new TransactionModel(string.Empty, walletId, reward)
             );
-            var mempool = new Dictionary<string, string>()
+            var mempool = new Dictionary<string, TransactionModel>()
             {
                 {
-                    coinbaseTransaction.Id,
-                    _transactionHashingService.GetTransactionHash(coinbaseTransaction)
+                    _transactionHashingService.GetSingleHash(coinbaseTransaction),
+                    coinbaseTransaction
                 },
             };
 
@@ -70,20 +68,19 @@ public class MinerService : IMinerService
 
                 newBlock = new BlockModel(
                     blockArgs,
-                    _transactionHashingService.GetMerkleRoot(mempool.Values)
+                    _transactionHashingService.GetMerkleRoot(mempool.Keys)
                 );
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
-                    await _blockchainService.AddBlockAsync(newBlock);
+                    newBlock = await _blockchainService.AddBlockAsync(newBlock);
                     _logger.LogInformation(
                         "Block {newBlockIndex} mined after {iteration} iterations",
                         newBlockIndex,
                         iteration
                     );
                     _logger.LogInformation("Proof number: {proof}", nonce);
-                    BlockModel? currentBlock = await _blockchainService.GetLastBlockAsync()!;
                     var currentHash =
-                        _proofOfWork.GetHash(currentBlock)
+                        _proofOfWork.GetHash(newBlock)
                         ?? throw new InvalidOperationException("Block could not be mined");
                     _logger.LogInformation(
                         "Previous hash: ..{previousHash} <-> Current hash: ..{currentHash}",
@@ -91,6 +88,12 @@ public class MinerService : IMinerService
                         currentHash.GetLastCharacters(5)
                     );
                     minedSuccesfully = true;
+                    foreach (var transaction in mempool.Values)
+                    {
+                        transaction.BlockId = newBlock.Id;
+                        await _transactionService.UpdateAsync(transaction);
+                    }
+                    await _transactionService.UpdateAsync(coinbaseTransaction);
                 }
                 nonce = _proofOfWork.GetNewNonce();
                 iteration++;

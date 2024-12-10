@@ -28,7 +28,7 @@ public class TransactionHashingService : ITransactionHashingService
         return GetMerkleRoot(newHashes);
     }
 
-    public string GetTransactionHash(TransactionModel transaction)
+    public string GetSingleHash(TransactionModel transaction)
     {
         var transactionAsString = new StringBuilder();
         transactionAsString

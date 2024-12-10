@@ -25,7 +25,7 @@ public class ProofOfWorkService(
         var blockAsString = new StringBuilder();
         blockAsString
             .Append(blockToProve.Index)
-            .Append(blockToProve.TimeStamp)
+            // .Append(blockToProve.TimeStamp)
             .Append(blockToProve.MerkleRoot)
             .Append(blockToProve.Proof)
             .Append(blockToProve.PreviousHash);

@@ -5,6 +5,6 @@ namespace Blockchain.Business.Interfaces.Transactions;
 public interface ITransactionService
 {
     Task<TransactionModel> AddAsync(TransactionModel transaction);
-    Task<IEnumerable<TransactionModel>> Get(int? numberOfTransactions = null);
-    Task ClearAsync();
+    Task<IEnumerable<TransactionModel>> GetAttachedToTheBlock(string blockId = null!);
+    Task UpdateAsync(TransactionModel transaction);
 }

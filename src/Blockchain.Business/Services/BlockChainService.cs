@@ -27,13 +27,14 @@ public class BlockchainService : IBlockchainService<BlockModel>
         return lastBlock is null ? null : _mapper.Map(lastBlock);
     }
 
-    public async Task AddBlockAsync(BlockModel newBlock)
+    public async Task<BlockModel> AddBlockAsync(BlockModel newBlock)
     {
         var newblockEntity = _mapper.Map(newBlock);
         await _unitOfWork
             .GetRepository<IBlockchainRepository<Block>>($"BlockchainRepository")
             .AddAsync(newblockEntity);
         await _unitOfWork.CommitAsync();
+        return _mapper.Map(newblockEntity);
     }
 
     public async Task<IEnumerable<BlockModel>> GetFullChainAsync()
