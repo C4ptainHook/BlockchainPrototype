@@ -14,6 +14,6 @@ public record TransactionModel
         Sender = sender;
         Recipient = recipient;
         Amount = amount;
-        TimeStamp = DateTime.Now;
+        TimeStamp = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
     }
 }

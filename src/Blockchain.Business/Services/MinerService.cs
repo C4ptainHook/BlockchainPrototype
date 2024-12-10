@@ -64,7 +64,12 @@ public class MinerService : IMinerService
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
             while (!minedSuccesfully)
             {
-                var blockArgs = new BlockArgs(newBlockIndex, DateTime.Now, nonce, lastBlockHash);
+                var blockArgs = new BlockArgs(
+                    newBlockIndex,
+                    DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+                    nonce,
+                    lastBlockHash
+                );
 
                 newBlock = new BlockModel(
                     blockArgs,
