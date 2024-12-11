@@ -18,7 +18,7 @@ public class BlockchainController : Controller
 
     [HttpGet("chain")]
     public async Task<ActionResult<IReadOnlyCollection<BlockModel>>> GetFullChain(
-        IBlockchainService<BlockModel> blockchain
+        IBlockService<BlockModel> blockchain
     )
     {
         return Ok(await blockchain.GetFullChainAsync());

@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blockchain.Data.Repositories;
 
-[Repository(nameof(BlockchainRepository))]
-public class BlockchainRepository : IBlockchainRepository<Block>
+[Repository(nameof(BlockRepository))]
+public class BlockRepository : IBlockRepository<Block>
 {
     private readonly BlockchainContext _context;
 
-    public BlockchainRepository(BlockchainContext context)
+    public BlockRepository(BlockchainContext context)
     {
         _context = context;
     }

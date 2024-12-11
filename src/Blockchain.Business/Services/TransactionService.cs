@@ -18,7 +18,7 @@ public class TransactionService(
     {
         var transactionEntity = _mapper.Map(transaction);
         await _unitOfWork
-            .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
+            .GetRepository<ITransactionRepository<Transaction>>()
             .AddAsync(transactionEntity);
         await _unitOfWork.CommitAsync();
         return _mapper.Map(transactionEntity);
@@ -27,7 +27,7 @@ public class TransactionService(
     public async Task<IEnumerable<TransactionModel>> GetAttachedToTheBlock(string blockId = null!)
     {
         var transactionEntities = await _unitOfWork
-            .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
+            .GetRepository<ITransactionRepository<Transaction>>()
             .GetAllAsync();
         return _mapper.Map(transactionEntities);
     }
@@ -35,9 +35,7 @@ public class TransactionService(
     public async Task UpdateAsync(TransactionModel transaction)
     {
         var transactionEntity = _mapper.Map(transaction);
-        _unitOfWork
-            .GetRepository<ITransactionRepository<Transaction>>($"{nameof(Transaction)}Repository")
-            .Update(transactionEntity);
+        _unitOfWork.GetRepository<ITransactionRepository<Transaction>>().Update(transactionEntity);
         await _unitOfWork.CommitAsync();
     }
 }

@@ -41,36 +41,37 @@ public class Program
 
         builder.Services.AddDbContext<BlockchainContext>(
             options => options.UseMongoDB(mongoClient, "blockchain-mongo"),
-            ServiceLifetime.Singleton
+            ServiceLifetime.Scoped
         );
 
         builder.Host.UseSerilog(
             (context, configuration) => configuration.ReadFrom.Configuration(context.Configuration)
         );
 
-        builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
-        builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddSingleton<
+        builder.Services.AddTransient<
             IMapper<TransactionDto, TransactionModel>,
             TransactionApiMapper
         >();
-        builder.Services.AddSingleton<
+        builder.Services.AddTransient<
             IMapper<TransactionModel, Transaction>,
             TransactionBusinessMapper
         >();
-        builder.Services.AddSingleton<ITransactionService, TransactionService>();
-        builder.Services.AddSingleton<
+        builder.Services.AddTransient<IMapper<BlockModel, Block>, BlockBusinessMapper>();
+        builder.Services.AddTransient<IMapper<WalletDto, WalletModel>, WalletApiMapper>();
+        builder.Services.AddTransient<IMapper<WalletModel, Wallet>, WalletBusinessMapper>();
+        builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
+
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<IBlockService<BlockModel>, BlockService>();
+        builder.Services.AddScoped<IWalletService, WalletService>();
+        builder.Services.AddScoped<ITransactionHashingService, TransactionHashingService>();
+        builder.Services.AddScoped<IMinerService, MinerService>();
+        builder.Services.AddScoped<
             IProofOfWorkServiceFactory<ProofOfWorkServiceArgsModel>,
             ProofOfWorkServiceFactory
         >();
-        builder.Services.AddSingleton<IMapper<BlockModel, Block>, BlockBusinessMapper>();
-        builder.Services.AddSingleton<IBlockchainService<BlockModel>, BlockchainService>();
-        builder.Services.AddSingleton<IMinerService, MinerService>();
 
-        builder.Services.AddSingleton<IWalletService, WalletService>();
-        builder.Services.AddSingleton<IMapper<WalletDto, WalletModel>, WalletApiMapper>();
-        builder.Services.AddSingleton<IMapper<WalletModel, Wallet>, WalletBusinessMapper>();
-        builder.Services.AddSingleton<ITransactionHashingService, TransactionHashingService>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         var app = builder.Build();
 

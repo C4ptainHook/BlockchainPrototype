@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Blockchain.Data.Attributes;
 using Blockchain.Data.Entities;
 using Blockchain.Data.Interfaces;
@@ -40,9 +41,10 @@ public class UnitOfWork : IUnitOfWork
         }
     }
 
-    public T GetRepository<T>(string repositoryName)
+    public T GetRepository<T>()
         where T : class
     {
+        var repositoryName = Regex.Match(typeof(T).Name, @"(?<=^I)\w+").Value;
         if (_repositories.TryGetValue(repositoryName, out var repository))
         {
             return (T)repository;

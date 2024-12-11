@@ -15,16 +15,14 @@ public class WalletService(IUnitOfWork unitOfWork, IMapper<WalletModel, Wallet> 
     public async Task AddAsync(WalletModel wallet)
     {
         var walletEntity = _mapper.Map(wallet);
-        await _unitOfWork
-            .GetRepository<IWalletRepository<Wallet>>($"{nameof(Wallet)}Repository")
-            .AddAsync(walletEntity);
+        await _unitOfWork.GetRepository<IWalletRepository<Wallet>>().AddAsync(walletEntity);
         await _unitOfWork.CommitAsync();
     }
 
     public async Task<WalletModel> GetByNickNameAsync(string nickName)
     {
         var wallet = await _unitOfWork
-            .GetRepository<IWalletRepository<Wallet>>($"{nameof(Wallet)}Repository")
+            .GetRepository<IWalletRepository<Wallet>>()
             .GetByNickNameAsync(nickName);
 
         return _mapper.Map(wallet);
@@ -33,9 +31,7 @@ public class WalletService(IUnitOfWork unitOfWork, IMapper<WalletModel, Wallet> 
     public async Task UpdateAsync(WalletModel wallet)
     {
         var walletEntity = _mapper.Map(wallet);
-        _unitOfWork
-            .GetRepository<IWalletRepository<Wallet>>($"{nameof(Wallet)}Repository")
-            .Update(walletEntity);
+        _unitOfWork.GetRepository<IWalletRepository<Wallet>>().Update(walletEntity);
         await _unitOfWork.CommitAsync();
     }
 }

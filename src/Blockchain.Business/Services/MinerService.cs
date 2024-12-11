@@ -12,14 +12,14 @@ public class MinerService : IMinerService
 {
     private readonly IProofOfWorkService _proofOfWork;
     private readonly ILogger<IMinerService> _logger;
-    private readonly IBlockchainService<BlockModel> _blockchainService;
+    private readonly IBlockService<BlockModel> _blockchainService;
     private readonly ITransactionService _transactionService;
     private readonly ITransactionHashingService _transactionHashingService;
     private readonly IWalletService _walletService;
     private readonly Func<int, decimal> _getReward;
 
     public MinerService(
-        IBlockchainService<BlockModel> blockchainService,
+        IBlockService<BlockModel> blockchainService,
         IProofOfWorkServiceFactory<ProofOfWorkServiceArgsModel> proofOfWorkFactory,
         ITransactionService transactionService,
         ITransactionHashingService transactionHashingService,
