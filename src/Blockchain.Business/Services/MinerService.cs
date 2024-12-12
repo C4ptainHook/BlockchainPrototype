@@ -54,15 +54,11 @@ public class MinerService : IMinerService
             BlockModel newBlock = default!;
             var wallet = await _walletService.GetByNickNameAsync(walletNickName);
             var coinbaseTransaction = await _transactionService.AddAsync(
-                new TransactionModel(string.Empty, wallet.Id, reward)
+                new TransactionModel(string.Empty, walletNickName, reward)
             );
-            var mempool = new Dictionary<string, TransactionModel>()
-            {
-                {
-                    _transactionHashingService.GetSingleHash(coinbaseTransaction),
-                    coinbaseTransaction
-                },
-            };
+            var mempool = new List<TransactionModel>() { coinbaseTransaction };
+            var freeTransactions = await _transactionService.GetAttachedToTheBlock();
+            mempool.AddRange(freeTransactions);
 
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
             while (!minedSuccesfully)
@@ -76,7 +72,7 @@ public class MinerService : IMinerService
 
                 newBlock = new BlockModel(
                     blockArgs,
-                    _transactionHashingService.GetMerkleRoot(mempool.Keys)
+                    _transactionHashingService.GetMerkleRoot(mempool)
                 );
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
@@ -96,7 +92,7 @@ public class MinerService : IMinerService
                         currentHash.GetLastCharacters(5)
                     );
                     minedSuccesfully = true;
-                    foreach (var transaction in mempool.Values)
+                    foreach (var transaction in mempool)
                     {
                         transaction.BlockId = newBlock.Id;
                         await _transactionService.UpdateAsync(transaction);

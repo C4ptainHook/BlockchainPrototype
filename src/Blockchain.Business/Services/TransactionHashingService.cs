@@ -9,23 +9,25 @@ public class TransactionHashingService : ITransactionHashingService
 {
     private readonly SHA256 _sha256 = SHA256.Create();
 
-    public string GetMerkleRoot(IEnumerable<string> transactionsHashes)
+    public string GetMerkleRoot(IEnumerable<TransactionModel> transactions)
     {
-        var transactionHashes = transactionsHashes.OrderBy(th => th).ToList();
+        var transactionHashes = transactions.Select(GetSingleHash).OrderBy(th => th).ToList();
         if (transactionHashes.Count == 0)
             return string.Empty;
-        if (transactionHashes.Count == 1)
-            return transactionHashes[0];
-        var newHashes = new List<string>();
-        for (var i = 0; i < transactionHashes.Count; i += 2)
+
+        var newHashes = new Queue<string>(transactionHashes);
+        while (newHashes.Count > 1)
         {
-            var firstHash = transactionHashes[i];
-            var secondHash =
-                i + 1 < transactionHashes.Count ? transactionHashes[i + 1] : string.Empty;
-            var newHash = _sha256.ComputeHash(Encoding.UTF8.GetBytes(firstHash + secondHash));
-            newHashes.Add(BitConverter.ToString(newHash).Replace("-", "").ToLower());
+            var countSnapshot = newHashes.Count;
+            for (var i = 0; i < countSnapshot; i += 2)
+            {
+                var firstHash = newHashes.Dequeue();
+                var secondHash = i + 1 < countSnapshot ? newHashes.Dequeue() : string.Empty;
+                var newHash = _sha256.ComputeHash(Encoding.UTF8.GetBytes(firstHash + secondHash));
+                newHashes.Enqueue(BitConverter.ToString(newHash).Replace("-", "").ToLower());
+            }
         }
-        return GetMerkleRoot(newHashes);
+        return newHashes.First();
     }
 
     public string GetSingleHash(TransactionModel transaction)
@@ -33,8 +35,8 @@ public class TransactionHashingService : ITransactionHashingService
         var transactionAsString = new StringBuilder();
         transactionAsString
             .Append(transaction.Id)
-            .Append(transaction.Sender)
-            .Append(transaction.Recipient)
+            .Append(transaction.SenderWallet)
+            .Append(transaction.RecipientWallet)
             .Append(transaction.Amount)
             .Append(transaction.TimeStamp);
 

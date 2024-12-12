@@ -2,6 +2,7 @@ using Blockchain.Data.Attributes;
 using Blockchain.Data.Entities;
 using Blockchain.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 
 namespace Blockchain.Data.Repositories;
 
@@ -29,6 +30,12 @@ public class TransactionRepository : ITransactionRepository<Transaction>
     public async Task<IEnumerable<Transaction>> GetAllAsync()
     {
         return await _context.Transactions.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<IEnumerable<Transaction>> GetAttachedToTheBlock(Block? block)
+    {
+        var transactions = await _context.Transactions.AsNoTracking().ToListAsync();
+        return transactions.Where(t => t.BlockId == (block?.Id ?? ObjectId.Empty));
     }
 
     public async Task<Transaction> GetByIdAsync(string id)
