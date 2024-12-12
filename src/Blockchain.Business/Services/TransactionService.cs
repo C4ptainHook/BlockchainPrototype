@@ -20,6 +20,9 @@ public class TransactionService(
 
     private TransactionModel ReplaceWalletNickNamesWithIds(TransactionModel transaction)
     {
+        transaction.SenderWallet = string.IsNullOrEmpty(transaction.SenderWallet)
+            ? transaction.RecipientWallet
+            : transaction.SenderWallet;
         var senderWallet = _walletService.GetByNickNameAsync(transaction.SenderWallet).Result;
         var recipientWallet = _walletService.GetByNickNameAsync(transaction.RecipientWallet).Result;
         transaction.SenderWallet = senderWallet.Id;
@@ -39,16 +42,17 @@ public class TransactionService(
 
     public async Task<IEnumerable<TransactionModel>> GetAttachedToTheBlock(BlockModel block = null!)
     {
+        var blockEntity = block is null ? null : _blockMapper.Map(block);
         var transactionEntities = await _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>()
-            .GetAttachedToTheBlock(_blockMapper.Map(block));
+            .GetAttachedToTheBlock(blockEntity);
 
         return _transactionMapper.Map(transactionEntities);
     }
 
     public async Task UpdateAsync(TransactionModel transaction)
     {
-        var transactionEntity = _transactionMapper.Map(ReplaceWalletNickNamesWithIds(transaction));
+        var transactionEntity = _transactionMapper.Map(transaction);
         _unitOfWork.GetRepository<ITransactionRepository<Transaction>>().Update(transactionEntity);
         await _unitOfWork.CommitAsync();
     }

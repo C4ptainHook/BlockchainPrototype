@@ -35,7 +35,7 @@ public class TransactionRepository : ITransactionRepository<Transaction>
     public async Task<IEnumerable<Transaction>> GetAttachedToTheBlock(Block? block)
     {
         var transactions = await _context.Transactions.AsNoTracking().ToListAsync();
-        return transactions.Where(t => t.BlockId == (block?.Id ?? ObjectId.Empty));
+        return transactions.Where(t => t.BlockId == block?.Id);
     }
 
     public async Task<Transaction> GetByIdAsync(string id)

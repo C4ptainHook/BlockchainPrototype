@@ -13,6 +13,6 @@ public record TransactionModel : BaseModel
         SenderWallet = senderWallet;
         RecipientWallet = recipientWallet;
         Amount = amount;
-        TimeStamp = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+        TimeStamp = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
     }
 }

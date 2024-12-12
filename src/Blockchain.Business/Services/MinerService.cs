@@ -53,11 +53,11 @@ public class MinerService : IMinerService
             var reward = _getReward(newBlockIndex);
             BlockModel newBlock = default!;
             var wallet = await _walletService.GetByNickNameAsync(walletNickName);
+            var freeTransactions = await _transactionService.GetAttachedToTheBlock();
             var coinbaseTransaction = await _transactionService.AddAsync(
                 new TransactionModel(string.Empty, walletNickName, reward)
             );
             var mempool = new List<TransactionModel>() { coinbaseTransaction };
-            var freeTransactions = await _transactionService.GetAttachedToTheBlock();
             mempool.AddRange(freeTransactions);
 
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
@@ -65,7 +65,7 @@ public class MinerService : IMinerService
             {
                 var blockArgs = new BlockArgsModel(
                     newBlockIndex,
-                    DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+                    DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc),
                     nonce,
                     lastBlockHash
                 );
