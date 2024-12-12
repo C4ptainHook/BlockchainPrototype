@@ -2,17 +2,17 @@ namespace Blockchain.Business.Models;
 
 public record TransactionModel : BaseModel
 {
-    public string Sender { get; init; }
-    public string Recipient { get; init; }
+    public string SenderWallet { get; set; }
+    public string RecipientWallet { get; set; }
     public decimal Amount { get; init; }
     public DateTime TimeStamp { get; init; }
     public string? BlockId { get; set; }
 
-    public TransactionModel(string sender, string recipient, decimal amount)
+    public TransactionModel(string senderWallet, string recipientWallet, decimal amount)
     {
-        Sender = sender;
-        Recipient = recipient;
+        SenderWallet = senderWallet;
+        RecipientWallet = recipientWallet;
         Amount = amount;
-        TimeStamp = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+        TimeStamp = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
     }
 }

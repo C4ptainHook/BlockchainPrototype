@@ -2,7 +2,7 @@ using Blockchain.Business.Models;
 
 namespace Blockchain.Business.Interfaces.Mining;
 
-public interface IBlockchainService<TBlockType>
+public interface IBlockService<TBlockType>
     where TBlockType : class
 {
     Task<TBlockType?> GetLastBlockAsync();

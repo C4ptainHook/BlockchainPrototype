@@ -12,14 +12,14 @@ public class MinerService : IMinerService
 {
     private readonly IProofOfWorkService _proofOfWork;
     private readonly ILogger<IMinerService> _logger;
-    private readonly IBlockchainService<BlockModel> _blockchainService;
+    private readonly IBlockService<BlockModel> _blockchainService;
     private readonly ITransactionService _transactionService;
     private readonly ITransactionHashingService _transactionHashingService;
     private readonly IWalletService _walletService;
     private readonly Func<int, decimal> _getReward;
 
     public MinerService(
-        IBlockchainService<BlockModel> blockchainService,
+        IBlockService<BlockModel> blockchainService,
         IProofOfWorkServiceFactory<ProofOfWorkServiceArgsModel> proofOfWorkFactory,
         ITransactionService transactionService,
         ITransactionHashingService transactionHashingService,
@@ -53,30 +53,26 @@ public class MinerService : IMinerService
             var reward = _getReward(newBlockIndex);
             BlockModel newBlock = default!;
             var wallet = await _walletService.GetByNickNameAsync(walletNickName);
+            var freeTransactions = await _transactionService.GetAttachedToTheBlock();
             var coinbaseTransaction = await _transactionService.AddAsync(
-                new TransactionModel(string.Empty, wallet.Id, reward)
+                new TransactionModel(string.Empty, walletNickName, reward)
             );
-            var mempool = new Dictionary<string, TransactionModel>()
-            {
-                {
-                    _transactionHashingService.GetSingleHash(coinbaseTransaction),
-                    coinbaseTransaction
-                },
-            };
+            var mempool = new List<TransactionModel>() { coinbaseTransaction };
+            mempool.AddRange(freeTransactions);
 
             _logger.LogInformation("START mining block {newBlockIndex}", newBlockIndex);
             while (!minedSuccesfully)
             {
                 var blockArgs = new BlockArgsModel(
                     newBlockIndex,
-                    DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+                    DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc),
                     nonce,
                     lastBlockHash
                 );
 
                 newBlock = new BlockModel(
                     blockArgs,
-                    _transactionHashingService.GetMerkleRoot(mempool.Keys)
+                    _transactionHashingService.GetMerkleRoot(mempool)
                 );
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
@@ -96,7 +92,7 @@ public class MinerService : IMinerService
                         currentHash.GetLastCharacters(5)
                     );
                     minedSuccesfully = true;
-                    foreach (var transaction in mempool.Values)
+                    foreach (var transaction in mempool)
                     {
                         transaction.BlockId = newBlock.Id;
                         await _transactionService.UpdateAsync(transaction);

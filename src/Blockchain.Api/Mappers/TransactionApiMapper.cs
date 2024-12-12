@@ -11,11 +11,21 @@ public partial class TransactionApiMapper : IMapper<TransactionDto, TransactionM
     [MapperIgnoreTarget(nameof(TransactionModel.Id))]
     [MapperIgnoreTarget(nameof(TransactionModel.BlockId))]
     [MapperIgnoreTarget(nameof(TransactionModel.TimeStamp))]
+    [MapProperty(nameof(TransactionDto.SenderWalletName), nameof(TransactionModel.SenderWallet))]
+    [MapProperty(
+        nameof(TransactionDto.RecipientWalletName),
+        nameof(TransactionModel.RecipientWallet)
+    )]
     public partial TransactionModel Map(TransactionDto from);
 
     [MapperIgnoreSource(nameof(TransactionModel.Id))]
     [MapperIgnoreSource(nameof(TransactionModel.BlockId))]
     [MapperIgnoreSource(nameof(TransactionModel.TimeStamp))]
+    [MapProperty(nameof(TransactionModel.SenderWallet), nameof(TransactionDto.SenderWalletName))]
+    [MapProperty(
+        nameof(TransactionModel.RecipientWallet),
+        nameof(TransactionDto.RecipientWalletName)
+    )]
     public partial TransactionDto Map(TransactionModel to);
 
     public partial IEnumerable<TransactionModel> Map(IEnumerable<TransactionDto> from);

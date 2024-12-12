@@ -5,5 +5,5 @@ namespace Blockchain.Business.Interfaces.Transactions;
 public interface ITransactionHashingService
 {
     string GetSingleHash(TransactionModel transaction);
-    string GetMerkleRoot(IEnumerable<string> transactionsHashes);
+    string GetMerkleRoot(IEnumerable<TransactionModel> transactionsHashes);
 }

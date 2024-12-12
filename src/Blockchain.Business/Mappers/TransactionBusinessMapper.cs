@@ -11,16 +11,16 @@ public partial class TransactionBusinessMapper : IMapper<TransactionModel, Trans
 {
     [MapperIgnoreSource(nameof(Transaction.Sender))]
     [MapperIgnoreSource(nameof(Transaction.Recipient))]
-    [MapProperty(nameof(Transaction.SenderId), nameof(TransactionModel.Sender))]
-    [MapProperty(nameof(Transaction.RecipientId), nameof(TransactionModel.Recipient))]
+    [MapProperty(nameof(Transaction.SenderId), nameof(TransactionModel.SenderWallet))]
+    [MapProperty(nameof(Transaction.RecipientId), nameof(TransactionModel.RecipientWallet))]
     public partial TransactionModel Map(Transaction transaction);
 
     [MapperIgnoreTarget(nameof(Transaction.Id))]
     [MapperIgnoreSource(nameof(TransactionModel.Id))]
     [MapperIgnoreTarget(nameof(Transaction.Sender))]
     [MapperIgnoreTarget(nameof(Transaction.Recipient))]
-    [MapProperty(nameof(TransactionModel.Sender), nameof(Transaction.SenderId))]
-    [MapProperty(nameof(TransactionModel.Recipient), nameof(Transaction.RecipientId))]
+    [MapProperty(nameof(TransactionModel.SenderWallet), nameof(Transaction.SenderId))]
+    [MapProperty(nameof(TransactionModel.RecipientWallet), nameof(Transaction.RecipientId))]
     public partial Transaction Map(TransactionModel transactionModel);
 
     [UserMapping]

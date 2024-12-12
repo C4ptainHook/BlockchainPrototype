@@ -15,6 +15,7 @@ public record WalletModel : BaseModel
         NickName = nickName;
         Balance = default;
     }
+
     public void UpdateBalance(decimal amount)
     {
         Balance += amount;
