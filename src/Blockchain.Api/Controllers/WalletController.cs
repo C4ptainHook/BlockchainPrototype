@@ -23,7 +23,10 @@ public class WalletController : Controller
     }
 
     [HttpPost("new")]
-    public async Task<IActionResult> AddWalletAsync(IWalletService walletService, WalletDto wallet)
+    public async Task<IActionResult> AddWalletAsync(
+        IWalletService walletService,
+        [FromQuery] WalletDto wallet
+    )
     {
         var walletModel = _mapper.Map(wallet);
         await walletService.AddAsync(walletModel);

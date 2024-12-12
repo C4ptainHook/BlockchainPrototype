@@ -48,6 +48,7 @@ public class TransactionRepository : ITransactionRepository<Transaction>
 
     public void Update(Transaction newTransaction)
     {
+        _context.ChangeTracker.Clear();
         _context.Transactions.Update(newTransaction);
     }
 

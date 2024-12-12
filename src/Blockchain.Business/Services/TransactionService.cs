@@ -33,7 +33,7 @@ public class TransactionService(
     public async Task<TransactionModel> AddAsync(TransactionModel transaction)
     {
         var transactionEntity = _transactionMapper.Map(ReplaceWalletNickNamesWithIds(transaction));
-        await _unitOfWork
+        transactionEntity = await _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>()
             .AddAsync(transactionEntity);
         await _unitOfWork.CommitAsync();
@@ -52,8 +52,9 @@ public class TransactionService(
 
     public async Task UpdateAsync(TransactionModel transaction)
     {
-        var transactionEntity = _transactionMapper.Map(transaction);
-        _unitOfWork.GetRepository<ITransactionRepository<Transaction>>().Update(transactionEntity);
+        _unitOfWork
+            .GetRepository<ITransactionRepository<Transaction>>()
+            .Update(_transactionMapper.Map(transaction));
         await _unitOfWork.CommitAsync();
     }
 }

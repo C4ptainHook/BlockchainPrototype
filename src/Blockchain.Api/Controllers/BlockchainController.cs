@@ -25,9 +25,15 @@ public class BlockchainController : Controller
     }
 
     [HttpPost("mine")]
-    public async Task<ActionResult> MineBlock(IMinerService miner, WalletDto wallet)
+    public async Task<ActionResult> MineBlock(
+        IHttpContextAccessor httpContextAccessor,
+        IMinerService miner
+    )
     {
-        await miner.MineBlockAsync(wallet.NickName);
+        var port = httpContextAccessor.HttpContext?.Request.Host.Port;
+        if (port is null)
+            return BadRequest();
+        await miner.MineBlockAsync(port.ToString()!);
         return Ok();
     }
 }

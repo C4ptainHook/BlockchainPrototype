@@ -15,8 +15,6 @@ public partial class TransactionBusinessMapper : IMapper<TransactionModel, Trans
     [MapProperty(nameof(Transaction.RecipientId), nameof(TransactionModel.RecipientWallet))]
     public partial TransactionModel Map(Transaction transaction);
 
-    [MapperIgnoreTarget(nameof(Transaction.Id))]
-    [MapperIgnoreSource(nameof(TransactionModel.Id))]
     [MapperIgnoreTarget(nameof(Transaction.Sender))]
     [MapperIgnoreTarget(nameof(Transaction.Recipient))]
     [MapProperty(nameof(TransactionModel.SenderWallet), nameof(Transaction.SenderId))]
