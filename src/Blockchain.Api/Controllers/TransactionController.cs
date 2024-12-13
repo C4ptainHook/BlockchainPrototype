@@ -25,8 +25,8 @@ public class TransactionController : Controller
 
     [HttpPost("new")]
     public async Task<IActionResult> AddTransaction(
-        ITransactionService transactionService,
-        TransactionDto transaction
+        [FromServices] ITransactionService transactionService,
+        [FromBody] TransactionDto transaction
     )
     {
         var transactionModel = _mapper.Map(transaction);

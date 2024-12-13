@@ -18,24 +18,47 @@ public class TransactionService(
     private readonly IMapper<BlockModel, Block> _blockMapper = blockMapper;
     private readonly IWalletService _walletService = walletService;
 
-    private TransactionModel ReplaceWalletNickNamesWithIds(TransactionModel transaction)
+    private async Task<TransactionModel> ReplaceWalletNickNamesWithIds(TransactionModel transaction)
     {
         transaction.SenderWallet = string.IsNullOrEmpty(transaction.SenderWallet)
             ? transaction.RecipientWallet
             : transaction.SenderWallet;
-        var senderWallet = _walletService.GetByNickNameAsync(transaction.SenderWallet).Result;
-        var recipientWallet = _walletService.GetByNickNameAsync(transaction.RecipientWallet).Result;
+        var senderWallet = await _walletService.GetByNickNameAsync(transaction.SenderWallet);
+        var recipientWallet = await _walletService.GetByNickNameAsync(transaction.RecipientWallet);
         transaction.SenderWallet = senderWallet.Id;
         transaction.RecipientWallet = recipientWallet.Id;
         return transaction;
     }
 
+    private async Task<bool> IsValid(TransactionModel transaction)
+    {
+        if (string.IsNullOrEmpty(transaction.SenderWallet))
+        {
+            return await Task.FromResult(true);
+        }
+        var senderWallet = await _walletService.GetByNickNameAsync(transaction.SenderWallet);
+        return await Task.FromResult(senderWallet.Balance >= transaction.Amount);
+    }
+
     public async Task<TransactionModel> AddAsync(TransactionModel transaction)
     {
-        var transactionEntity = _transactionMapper.Map(ReplaceWalletNickNamesWithIds(transaction));
+        if (!await IsValid(transaction))
+        {
+            throw new InvalidOperationException("Insufficient funds");
+        }
+        var senderWallet = await _walletService.GetByNickNameAsync(transaction.SenderWallet);
+        var recipientWallet = await _walletService.GetByNickNameAsync(transaction.RecipientWallet);
+        var transactionEntity = _transactionMapper.Map(
+            await ReplaceWalletNickNamesWithIds(transaction)
+        );
         transactionEntity = await _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>()
             .AddAsync(transactionEntity);
+        senderWallet?.UpdateBalance(-transaction.Amount);
+        if (senderWallet is not null)
+            await _walletService.UpdateAsync(senderWallet);
+        recipientWallet.UpdateBalance(transaction.Amount);
+        await _walletService.UpdateAsync(recipientWallet);
         await _unitOfWork.CommitAsync();
         return _transactionMapper.Map(transactionEntity);
     }

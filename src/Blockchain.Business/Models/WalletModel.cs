@@ -16,6 +16,12 @@ public record WalletModel : BaseModel
         Balance = default;
     }
 
+    public WalletModel(string nickName, decimal balance)
+    {
+        NickName = nickName;
+        Balance = balance;
+    }
+
     public void UpdateBalance(decimal amount)
     {
         Balance += amount;

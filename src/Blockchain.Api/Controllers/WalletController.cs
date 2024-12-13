@@ -24,12 +24,22 @@ public class WalletController : Controller
 
     [HttpPost("new")]
     public async Task<IActionResult> AddWalletAsync(
-        IWalletService walletService,
+        [FromServices] IWalletService walletService,
         [FromQuery] WalletDto wallet
     )
     {
         var walletModel = _mapper.Map(wallet);
         await walletService.AddAsync(walletModel);
         return Ok();
+    }
+
+    [HttpGet("balance")]
+    public async Task<ActionResult<decimal>> GetBalanceAsync(
+        [FromServices] IWalletService walletService,
+        [FromQuery] string walletNickName
+    )
+    {
+        var wallet = await walletService.GetByNickNameAsync(walletNickName);
+        return wallet.Balance;
     }
 }

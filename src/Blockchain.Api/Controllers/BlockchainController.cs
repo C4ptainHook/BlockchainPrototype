@@ -18,7 +18,7 @@ public class BlockchainController : Controller
 
     [HttpGet("chain")]
     public async Task<ActionResult<IReadOnlyCollection<BlockModel>>> GetFullChain(
-        IBlockService<BlockModel> blockchain
+        [FromServices] IBlockService<BlockModel> blockchain
     )
     {
         return Ok(await blockchain.GetFullChainAsync());
@@ -26,14 +26,14 @@ public class BlockchainController : Controller
 
     [HttpPost("mine")]
     public async Task<ActionResult> MineBlock(
-        IHttpContextAccessor httpContextAccessor,
-        IMinerService miner
+        [FromServices] IHttpContextAccessor httpContextAccessor,
+        [FromServices] IMinerService miner
     )
     {
         var port = httpContextAccessor.HttpContext?.Request.Host.Port;
         if (port is null)
             return BadRequest();
         await miner.MineBlockAsync(port.ToString()!);
-        return Ok();
+        return Created();
     }
 }

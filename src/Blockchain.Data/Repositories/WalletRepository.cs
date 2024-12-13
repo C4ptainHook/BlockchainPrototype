@@ -43,8 +43,10 @@ public class WalletRepository : IWalletRepository<Wallet>
             );
     }
 
-    public async Task<Wallet> GetByNickNameAsync(string nickName)
+    public async Task<Wallet?> GetByNickNameAsync(string nickName)
     {
+        if (string.IsNullOrEmpty(nickName))
+            return null;
         return await _context
                 .Wallets.AsNoTracking()
                 .FirstOrDefaultAsync(w => w.NickName == nickName)
