@@ -36,7 +36,7 @@ public class WalletController : Controller
     [HttpGet("balance")]
     public async Task<ActionResult<decimal>> GetBalanceAsync(
         [FromServices] IWalletService walletService,
-        [FromQuery] string walletNickName
+        [FromQuery(Name = "name")] string walletNickName
     )
     {
         var wallet = await walletService.GetByNickNameAsync(walletNickName);

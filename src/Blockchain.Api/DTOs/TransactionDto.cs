@@ -1,8 +1,8 @@
 namespace Blockchain.Api.DTOs;
 
-public class TransactionDto
+public class TransactionDto(string SenderWalletName, string RecipientWalletName, decimal Amount)
 {
-    public string SenderWalletName { get; set; }
-    public string RecipientWalletName { get; set; }
-    public decimal Amount { get; set; }
+    public string SenderWalletName { get; init; } = SenderWalletName;
+    public string RecipientWalletName { get; init; } = RecipientWalletName;
+    public decimal Amount { get; init; } = Amount;
 }

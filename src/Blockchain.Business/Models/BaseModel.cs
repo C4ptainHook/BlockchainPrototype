@@ -7,5 +7,5 @@ namespace Blockchain.Business.Models;
 
 public abstract record BaseModel
 {
-    public string Id { get; init; }
+    public string? Id { get; init; }
 }
