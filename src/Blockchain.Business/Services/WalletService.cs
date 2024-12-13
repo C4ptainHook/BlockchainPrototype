@@ -19,13 +19,13 @@ public class WalletService(IUnitOfWork unitOfWork, IMapper<WalletModel, Wallet> 
         await _unitOfWork.CommitAsync();
     }
 
-    public async Task<WalletModel> GetByNickNameAsync(string nickName)
+    public async Task<WalletModel?> GetByNickNameAsync(string nickName)
     {
         var wallet = await _unitOfWork
             .GetRepository<IWalletRepository<Wallet>>()
             .GetByNickNameAsync(nickName);
 
-        return _mapper.Map(wallet);
+        return wallet is null ? null : _mapper.Map(wallet);
     }
 
     public async Task UpdateAsync(WalletModel wallet)
