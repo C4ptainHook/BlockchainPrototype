@@ -1,4 +1,5 @@
 using Blockchain.Api.DTOs;
+using Blockchain.Api.ExceptionHandlers;
 using Blockchain.Api.Mappers;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.PoW;
@@ -30,6 +31,8 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
         Env.Load(@"..\Env\api.env");
 
         if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_STRING")))
@@ -75,6 +78,8 @@ public class Program
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         var app = builder.Build();
+
+        app.UseExceptionHandler();
 
         if (app.Environment.IsDevelopment())
         {
