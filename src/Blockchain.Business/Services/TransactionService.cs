@@ -18,25 +18,13 @@ public class TransactionService(
     private readonly IMapper<BlockModel, Block> _blockMapper = blockMapper;
     private readonly IWalletService _walletService = walletService;
 
-    private async Task<TransactionModel> ReplaceWalletNickNamesWithIds(TransactionModel transaction)
-    {
-        transaction.SenderWallet = string.IsNullOrEmpty(transaction.SenderWallet)
-            ? transaction.RecipientWallet
-            : transaction.SenderWallet;
-        var senderWallet = await _walletService.GetByNickNameAsync(transaction.SenderWallet);
-        var recipientWallet = await _walletService.GetByNickNameAsync(transaction.RecipientWallet);
-        transaction.SenderWallet = senderWallet.Id;
-        transaction.RecipientWallet = recipientWallet.Id;
-        return transaction;
-    }
-
     private async Task<bool> IsValid(TransactionModel transaction)
     {
         if (string.IsNullOrEmpty(transaction.SenderWallet))
         {
             return await Task.FromResult(true);
         }
-        var senderWallet = await _walletService.GetByNickNameAsync(transaction.SenderWallet);
+        var senderWallet = await _walletService.GetByIdAsync(transaction.SenderWallet);
         return await Task.FromResult(senderWallet.Balance >= transaction.Amount);
     }
 
@@ -46,11 +34,9 @@ public class TransactionService(
         {
             throw new InvalidOperationException("Insufficient funds");
         }
-        var senderWallet = await _walletService.GetByNickNameAsync(transaction.SenderWallet);
-        var recipientWallet = await _walletService.GetByNickNameAsync(transaction.RecipientWallet);
-        var transactionEntity = _transactionMapper.Map(
-            await ReplaceWalletNickNamesWithIds(transaction)
-        );
+        var senderWallet = await _walletService.GetByIdAsync(transaction.SenderWallet);
+        var recipientWallet = await _walletService.GetByIdAsync(transaction.RecipientWallet);
+        var transactionEntity = _transactionMapper.Map(transaction);
         transactionEntity = await _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>()
             .AddAsync(transactionEntity);

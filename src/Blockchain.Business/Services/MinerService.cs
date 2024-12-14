@@ -55,7 +55,7 @@ public class MinerService : IMinerService
             var wallet = await _walletService.GetByNickNameAsync(walletNickName);
             var freeTransactions = await _transactionService.GetAttachedToTheBlock();
             var coinbaseTransaction = await _transactionService.AddAsync(
-                new TransactionModel(string.Empty, walletNickName, reward)
+                new TransactionModel(string.Empty, wallet.Id, reward)
             );
             var mempool = new List<TransactionModel>() { coinbaseTransaction };
             mempool.AddRange(freeTransactions);

@@ -38,7 +38,7 @@ public class TransactionRepository : ITransactionRepository<Transaction>
         return transactions.Where(t => t.BlockId == block?.Id);
     }
 
-    public async Task<Transaction> GetByIdAsync(string id)
+    public async Task<Transaction?> GetByIdAsync(string id)
     {
         return await _context.Transactions.FindAsync(id)
             ?? throw new KeyNotFoundException(

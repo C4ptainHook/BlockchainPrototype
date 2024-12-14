@@ -10,22 +10,14 @@ namespace Blockchain.Api.Controllers;
 [Route("api/v1.0/[controller]")]
 public class WalletController : Controller
 {
-    private readonly ILogger<WalletController> _logger;
     private readonly IMapper<WalletDto, WalletModel> _mapper;
 
-    public WalletController(
-        ILogger<WalletController> logger,
-        IMapper<WalletDto, WalletModel> mapper
-    )
-    {
-        _logger = logger;
-        _mapper = mapper;
-    }
+    public WalletController(IMapper<WalletDto, WalletModel> mapper) => _mapper = mapper;
 
     [HttpPost("new")]
     public async Task<IActionResult> AddWalletAsync(
         [FromServices] IWalletService walletService,
-        [FromQuery] WalletDto wallet
+        [FromBody] WalletDto wallet
     )
     {
         var walletModel = _mapper.Map(wallet);
