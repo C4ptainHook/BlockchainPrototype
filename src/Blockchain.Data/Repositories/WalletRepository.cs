@@ -6,6 +6,7 @@ using Blockchain.Data.Attributes;
 using Blockchain.Data.Entities;
 using Blockchain.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 
 namespace Blockchain.Data.Repositories;
 
@@ -35,9 +36,13 @@ public class WalletRepository : IWalletRepository<Wallet>
         return await _context.Wallets.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Wallet> GetByIdAsync(string id)
+    public async Task<Wallet?> GetByIdAsync(string id)
     {
-        return await _context.Wallets.FindAsync(id)
+        if (string.IsNullOrEmpty(id))
+            return null;
+        return await _context
+                .Wallets.AsNoTracking()
+                .FirstOrDefaultAsync(w => w.Id == new ObjectId(id))
             ?? throw new KeyNotFoundException(
                 $"{typeof(Wallet).Name} entity with id:{id} not found"
             );

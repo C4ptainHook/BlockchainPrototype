@@ -31,11 +31,25 @@ public class BlockRepository : IBlockRepository<Block>
         return await _context.Blocks.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Block> GetByIdAsync(string id)
+    public async Task<Block?> GetByIdAsync(string id)
     {
         return await _context.Blocks.FindAsync(id)
             ?? throw new KeyNotFoundException(
                 $"{typeof(Block).Name} entity with id:{id} not found"
             );
+    }
+
+    public void Remove(Block entity)
+    {
+        if (_context.Entry(entity).State == EntityState.Detached)
+        {
+            _context.Blocks.Attach(entity);
+        }
+        _context.Blocks.Remove(entity);
+    }
+
+    public void RemoveRange(IEnumerable<Block> entities)
+    {
+        _context.Blocks.RemoveRange(entities);
     }
 }

@@ -1,7 +1,10 @@
 using Blockchain.Api.DTOs;
 using Blockchain.Api.ExceptionHandlers;
 using Blockchain.Api.Mappers;
+using Blockchain.Business.Caching;
+using Blockchain.Business.Decorators;
 using Blockchain.Business.Interfaces.Mining;
+using Blockchain.Business.Interfaces.Network;
 using Blockchain.Business.Interfaces.PoW;
 using Blockchain.Business.Interfaces.Transactions;
 using Blockchain.Business.Interfaces.Utils;
@@ -66,8 +69,10 @@ public class Program
         builder.Services.AddTransient<IRandomNumerical<int>, RandomWrapper>();
 
         builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<TransactionServiceMappingDecorator>();
         builder.Services.AddScoped<IBlockService<BlockModel>, BlockService>();
         builder.Services.AddScoped<IWalletService, WalletService>();
+        builder.Services.AddScoped<INodeService, NodeService>();
         builder.Services.AddScoped<ITransactionHashingService, TransactionHashingService>();
         builder.Services.AddScoped<IMinerService, MinerService>();
         builder.Services.AddScoped<
@@ -76,6 +81,7 @@ public class Program
         >();
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddSingleton<BlockCachingService>();
 
         var app = builder.Build();
 

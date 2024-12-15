@@ -1,6 +1,11 @@
 namespace Blockchain.Api.DTOs;
 
-public class WalletDto(string NickName)
+public class WalletDto
 {
-    public string NickName { get; init; } = NickName;
+    public string NickName { get; init; }
+
+    public WalletDto(string nickName)
+    {
+        NickName = nickName;
+    }
 }

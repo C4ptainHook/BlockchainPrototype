@@ -1,4 +1,4 @@
-using System.Collections;
+using Blockchain.Business.Caching;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Mappers;
 using Blockchain.Business.Models;
@@ -11,11 +11,17 @@ public class BlockService : IBlockService<BlockModel>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper<BlockModel, Block> _mapper;
+    private readonly BlockCachingService _blockCachingService;
 
-    public BlockService(IUnitOfWork unitOfWork, IMapper<BlockModel, Block> mapper)
+    public BlockService(
+        IUnitOfWork unitOfWork,
+        IMapper<BlockModel, Block> mapper,
+        BlockCachingService blockCachingService
+    )
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _blockCachingService = blockCachingService;
     }
 
     public async Task<BlockModel?> GetLastBlockAsync()
@@ -43,7 +49,19 @@ public class BlockService : IBlockService<BlockModel>
 
     public async Task<int> GetChainLength()
     {
-        var blockchain = await _unitOfWork.GetRepository<IBlockRepository<Block>>().GetAllAsync();
-        return blockchain is null ? 0 : blockchain.Count();
+        if (_blockCachingService.Length < 0)
+        {
+            var blockchain = await _unitOfWork
+                .GetRepository<IBlockRepository<Block>>()
+                .GetAllAsync();
+            _blockCachingService.Length = blockchain is null ? 0 : blockchain.Count();
+        }
+        return _blockCachingService.Length;
+    }
+
+    public async Task RemoveBlockAsync(BlockModel blockToRemove)
+    {
+        _unitOfWork.GetRepository<IBlockRepository<Block>>().Remove(_mapper.Map(blockToRemove));
+        await _unitOfWork.CommitAsync();
     }
 }

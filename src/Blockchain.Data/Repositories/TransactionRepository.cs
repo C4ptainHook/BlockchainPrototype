@@ -38,7 +38,7 @@ public class TransactionRepository : ITransactionRepository<Transaction>
         return transactions.Where(t => t.BlockId == block?.Id);
     }
 
-    public async Task<Transaction> GetByIdAsync(string id)
+    public async Task<Transaction?> GetByIdAsync(string id)
     {
         return await _context.Transactions.FindAsync(id)
             ?? throw new KeyNotFoundException(
@@ -54,6 +54,10 @@ public class TransactionRepository : ITransactionRepository<Transaction>
 
     public void Remove(Transaction entity)
     {
+        if (_context.Entry(entity).State == EntityState.Detached)
+        {
+            _context.Transactions.Attach(entity);
+        }
         _context.Transactions.Remove(entity);
     }
 

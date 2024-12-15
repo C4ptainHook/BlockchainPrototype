@@ -34,6 +34,21 @@ public class ProofOfWorkService(
         return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
     }
 
+    public bool IsChainValid(in IEnumerable<BlockModel> chainToCheck)
+    {
+        var previousBlock = chainToCheck.First();
+
+        foreach (var block in chainToCheck.Skip(1))
+        {
+            if (block.PreviousHash != GetHash(previousBlock))
+                return false;
+
+            previousBlock = block;
+        }
+
+        return true;
+    }
+
     public bool IsHashValid(in string hashToCheck)
     {
         return hashToCheck.EndsWith(args.Difficulty);
