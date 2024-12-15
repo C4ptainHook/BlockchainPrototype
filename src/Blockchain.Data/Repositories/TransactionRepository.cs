@@ -54,6 +54,10 @@ public class TransactionRepository : ITransactionRepository<Transaction>
 
     public void Remove(Transaction entity)
     {
+        if (_context.Entry(entity).State == EntityState.Detached)
+        {
+            _context.Transactions.Attach(entity);
+        }
         _context.Transactions.Remove(entity);
     }
 

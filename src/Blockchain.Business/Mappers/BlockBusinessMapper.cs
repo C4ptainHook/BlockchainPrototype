@@ -15,8 +15,6 @@ public partial class BlockBusinessMapper : IMapper<BlockModel, Block>
         _mapper = mapper;
     }
 
-    [MapperIgnoreSource(nameof(BlockModel.Id))]
-    [MapperIgnoreTarget(nameof(Block.Id))]
     public partial Block Map(BlockModel from);
 
     public partial BlockModel Map(Block to);

@@ -1,3 +1,4 @@
+using Blockchain.Business.Caching;
 using Blockchain.Business.Extensions;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.PoW;
@@ -13,6 +14,7 @@ public class MinerService : IMinerService
     private readonly IProofOfWorkService _proofOfWork;
     private readonly ILogger<IMinerService> _logger;
     private readonly IBlockService<BlockModel> _blockchainService;
+    private readonly BlockCachingService _blockCachingService;
     private readonly ITransactionService _transactionService;
     private readonly ITransactionHashingService _transactionHashingService;
     private readonly IWalletService _walletService;
@@ -20,6 +22,7 @@ public class MinerService : IMinerService
 
     public MinerService(
         IBlockService<BlockModel> blockchainService,
+        BlockCachingService blockCachingService,
         IProofOfWorkServiceFactory<ProofOfWorkServiceArgsModel> proofOfWorkFactory,
         ITransactionService transactionService,
         ITransactionHashingService transactionHashingService,
@@ -28,6 +31,7 @@ public class MinerService : IMinerService
     )
     {
         _blockchainService = blockchainService;
+        _blockCachingService = blockCachingService;
         _transactionService = transactionService;
         _transactionHashingService = transactionHashingService;
         _walletService = walletService;
@@ -55,7 +59,7 @@ public class MinerService : IMinerService
             var wallet = await _walletService.GetByNickNameAsync(walletNickName);
             var freeTransactions = await _transactionService.GetAttachedToTheBlock();
             var coinbaseTransaction = await _transactionService.AddAsync(
-                new TransactionModel(string.Empty, wallet.Id, reward)
+                new TransactionModel(wallet.Id, wallet.Id, reward)
             );
             var mempool = new List<TransactionModel>() { coinbaseTransaction };
             mempool.AddRange(freeTransactions);
@@ -77,6 +81,8 @@ public class MinerService : IMinerService
                 if (_proofOfWork.IsHashValid(_proofOfWork.GetHash(newBlock)!))
                 {
                     newBlock = await _blockchainService.AddBlockAsync(newBlock);
+                    _blockCachingService.Blocks.Add(newBlock);
+                    _blockCachingService.Length += 1;
                     _logger.LogInformation(
                         "Block {newBlockIndex} mined after {iteration} iterations",
                         newBlockIndex,

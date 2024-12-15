@@ -20,7 +20,7 @@ public class TransactionService(
 
     private async Task<bool> IsValid(TransactionModel transaction)
     {
-        if (string.IsNullOrEmpty(transaction.SenderWallet))
+        if (transaction.SenderWallet == transaction.RecipientWallet)
         {
             return await Task.FromResult(true);
         }
@@ -41,7 +41,7 @@ public class TransactionService(
             .GetRepository<ITransactionRepository<Transaction>>()
             .AddAsync(transactionEntity);
         senderWallet?.UpdateBalance(-transaction.Amount);
-        if (senderWallet is not null)
+        if (senderWallet.Id != recipientWallet.Id)
             await _walletService.UpdateAsync(senderWallet);
         recipientWallet.UpdateBalance(transaction.Amount);
         await _walletService.UpdateAsync(recipientWallet);
@@ -64,6 +64,14 @@ public class TransactionService(
         _unitOfWork
             .GetRepository<ITransactionRepository<Transaction>>()
             .Update(_transactionMapper.Map(transaction));
+        await _unitOfWork.CommitAsync();
+    }
+
+    public async Task RemoveAsync(TransactionModel transaction)
+    {
+        _unitOfWork
+            .GetRepository<ITransactionRepository<Transaction>>()
+            .Remove(_transactionMapper.Map(transaction));
         await _unitOfWork.CommitAsync();
     }
 }

@@ -38,4 +38,18 @@ public class BlockRepository : IBlockRepository<Block>
                 $"{typeof(Block).Name} entity with id:{id} not found"
             );
     }
+
+    public void Remove(Block entity)
+    {
+        if (_context.Entry(entity).State == EntityState.Detached)
+        {
+            _context.Blocks.Attach(entity);
+        }
+        _context.Blocks.Remove(entity);
+    }
+
+    public void RemoveRange(IEnumerable<Block> entities)
+    {
+        _context.Blocks.RemoveRange(entities);
+    }
 }

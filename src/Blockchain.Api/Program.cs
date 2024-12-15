@@ -1,6 +1,7 @@
 using Blockchain.Api.DTOs;
 using Blockchain.Api.ExceptionHandlers;
 using Blockchain.Api.Mappers;
+using Blockchain.Business.Caching;
 using Blockchain.Business.Decorators;
 using Blockchain.Business.Interfaces.Mining;
 using Blockchain.Business.Interfaces.Network;
@@ -80,6 +81,7 @@ public class Program
         >();
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddSingleton<BlockCachingService>();
 
         var app = builder.Build();
 

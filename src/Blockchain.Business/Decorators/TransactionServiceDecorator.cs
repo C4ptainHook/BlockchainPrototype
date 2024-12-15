@@ -61,4 +61,9 @@ public class TransactionServiceMappingDecorator : ITransactionService
     {
         await _transactionService.UpdateAsync(transaction);
     }
+
+    public Task RemoveAsync(TransactionModel transaction)
+    {
+        return _transactionService.RemoveAsync(transaction);
+    }
 }

@@ -9,4 +9,5 @@ public interface IBlockService<TBlockType>
     Task<TBlockType> AddBlockAsync(TBlockType newBlock);
     Task<int> GetChainLength();
     Task<IEnumerable<TBlockType>> GetFullChainAsync();
+    Task RemoveBlockAsync(TBlockType blockToRemove);
 }
