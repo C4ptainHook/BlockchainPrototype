@@ -1,0 +1,27 @@
+services:
+  database:
+    image: mongo:latest
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    env_file:
+      - ./src/Env/mongo.env
+  # api:
+  #   build: 
+  #     context: ./
+  #     args:
+  #       - BUILD_CONFIGURATION=Debug
+  #   container_name: backend-container
+  #   volumes:
+  #     - ./src:/app
+  #   ports:
+  #     - "5000:5000"
+  #   env_file:
+  #     - ./src/Env/api.env
+  #   depends_on:
+  #     - database
+
+volumes:
+  mongodb-data:

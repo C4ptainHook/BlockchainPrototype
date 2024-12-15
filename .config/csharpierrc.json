@@ -1,0 +1,9 @@
+{
+"printWidth" : 160,
+"useSpaces" : false,
+"tabWidth" : 4,
+"preprocessorSymbolSets" : [
+  "",
+  "DEBUG"
+]
+}
