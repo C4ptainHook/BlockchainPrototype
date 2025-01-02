@@ -35,6 +35,13 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
+        });
         builder.Services.AddProblemDetails();
         Env.Load(@"..\Env\api.env");
 
@@ -85,6 +92,7 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseCors();
         app.UseExceptionHandler();
 
         if (app.Environment.IsDevelopment())

@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    @apply bg-gray-50;
+}
+
+.parent-container {
+    display: grid;
+    grid-template-columns: 65fr 35fr;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    @apply shadow-lg;
+}
+
+.main-container {
+    @apply bg-white p-6;
+}
+
+.main-container h1 {
+    @apply text-3xl font-bold mb-6 text-gray-800;
+}
+
+.side-container {
+    display: flex;
+    grid-column: 2;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    height: inherit;
+    @apply bg-indigo-100 shadow-inner p-6;
+}
+
+.transaction-container, 
+.wallet-container {
+    @apply bg-white rounded-lg shadow-md p-6 w-11/12 max-w-md;
+}
+
+.transaction-form,
+.wallet-form {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    @apply space-y-4;
+}
+
+input[type="text"],
+input[type="number"] {
+    @apply w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200;
+}
+
+#balance {
+    @apply text-lg font-semibold text-gray-700 my-2;
+}
+
+.send {
+    @apply px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-200 font-medium;
+}
+
+@media (max-width: 768px) {
+    .parent-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+    
+    .side-container {
+        grid-column: 1;
+        @apply py-8 space-y-6;
+    }
+}

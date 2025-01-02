@@ -1,3 +1,5 @@
+using Blockchain.Business.Enums;
+
 namespace Blockchain.Business.Models;
 
 public record TransactionModel : BaseModel
@@ -7,12 +9,19 @@ public record TransactionModel : BaseModel
     public decimal Amount { get; init; }
     public DateTime TimeStamp { get; init; }
     public string? BlockId { get; set; }
+    public TransactionType TransactionType { get; init; }
 
-    public TransactionModel(string senderWallet, string recipientWallet, decimal amount)
+    public TransactionModel(
+        string senderWallet,
+        string recipientWallet,
+        decimal amount,
+        TransactionType transactionType = TransactionType.Transfer
+    )
     {
         SenderWallet = senderWallet;
         RecipientWallet = recipientWallet;
         Amount = amount;
         TimeStamp = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+        TransactionType = transactionType;
     }
 }
