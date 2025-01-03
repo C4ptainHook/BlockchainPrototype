@@ -5,6 +5,7 @@
 html, body {
     height: 100%;
     width: 100%;
+    max-width: 100%;
     padding: 0;
     margin: 0;
     overflow: hidden;
@@ -13,6 +14,7 @@ html, body {
 
 .parent-container {
     display: grid;
+    max-width: 100%;
     grid-template-columns: 65fr 35fr;
     height: 100%;
     width: 100%;
@@ -21,7 +23,112 @@ html, body {
 }
 
 .main-container {
+    display: flex;
+    grid-column: 1;
+    max-width: 65vw;
+    flex-flow: column nowrap;
     @apply bg-white p-6;
+}
+
+.blockchain-container{
+    display: flex;
+    grid-column: 1;
+    height: inherit;
+    flex-basis: 80%;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    @apply bg-white p-6;
+}
+
+.block {
+    width: 100%; 
+    max-width: 400px; 
+    padding: 16px;
+    margin: 0 auto 16px; 
+    border: 1px solid #e5e7eb;
+    border-radius: 8px; 
+    background-color: #f8fafc; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+}
+
+.block:hover {
+    transform: translateY(-4px); 
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+.block h3 {
+    font-size: 1.25rem; 
+    font-weight: bold;
+    color: #4f46e5; 
+    margin-bottom: 8px;
+    text-align: center;
+}
+.block p {
+    font-size: 0.875rem; 
+    color: #374151; 
+    margin-bottom: 8px;
+    word-wrap: break-word;
+}
+
+.blockchain-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    max-height: 80vh;
+    justify-content: flex-start;
+    gap: 16px; 
+    padding: 16px;
+    background-color: #e0e7ff;
+    border-radius: 8px; 
+    @apply overflow-y-auto overflow-x-hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #818cf8 #e0e7ff;
+}
+
+.mempool-container {
+    display: flex;
+    grid-column: 1;
+    max-height: 17vh;
+    max-width: inherit;
+    align-items: center;
+    flex-basis: 20%;
+    flex-flow: row nowrap;
+    @apply bg-white p-6 rounded-lg border-2 border-indigo-200 outline outline-2 outline-indigo-100 mb-4;
+}
+
+.mempool-container svg {
+    @apply w-10 h-10 ml-2;
+}
+#transactions {
+    display: flex;
+    flex-flow: row nowrap;
+    max-width: 100%;
+    gap: 1rem;
+    @apply w-full max-h-[300px] overflow-y-hidden overflow-x-auto mt-4;
+    scrollbar-width: thin;
+    scrollbar-color: #818cf8 #e0e7ff;
+}
+
+#transactions::-webkit-scrollbar {
+    width: 6px;
+}
+
+#transactions::-webkit-scrollbar-track {
+    @apply bg-indigo-100 rounded-full;
+}
+
+#transactions::-webkit-scrollbar-thumb {
+    @apply bg-indigo-400 rounded-full;
+}
+
+.transaction-item {
+    transition: transform 0.2s ease;
+    min-width: fit-content;
+}
+
+.transaction-item:hover {
+    @apply bg-indigo-50;
 }
 
 .main-container h1 {
@@ -64,6 +171,15 @@ input[type="number"] {
 
 .send {
     @apply px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-200 font-medium;
+}
+
+img[alt="Miner"] {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+img[alt="Miner"]:hover {
+    transform: scale(1.5);
 }
 
 @media (max-width: 768px) {

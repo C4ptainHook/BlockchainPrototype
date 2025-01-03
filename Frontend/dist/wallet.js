@@ -1,9 +1,7 @@
-// Get form and button elements
 const walletForm = document.querySelector('.wallet-form');
 const createWalletButton = document.getElementById('send-wallet');
 const getBalanceButton = document.getElementById('get-wallet');
 
-// Add event listener for wallet creation
 createWalletButton.addEventListener('click', async (e) => {
     e.preventDefault();
 
@@ -31,10 +29,8 @@ createWalletButton.addEventListener('click', async (e) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Clear the input field
         nameInput.value = '';
         
-        // Show success message
         alert('Wallet created successfully!');
 
     } catch (error) {
@@ -43,7 +39,6 @@ createWalletButton.addEventListener('click', async (e) => {
     }
 });
 
-// Add event listener for getting balance
 getBalanceButton.addEventListener('click', async (e) => {
     e.preventDefault();
 
@@ -69,7 +64,7 @@ getBalanceButton.addEventListener('click', async (e) => {
 
         const balance = await response.json();
         console.log('Balance:', balance);
-        // Update the balance label
+
         const balanceLabel = document.getElementById('balance');
         balanceLabel.textContent = `Balance: ${balance}`;
 
@@ -78,3 +73,5 @@ getBalanceButton.addEventListener('click', async (e) => {
         alert('Failed to get wallet balance. Please try again.');
     }
 });
+
+
